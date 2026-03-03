@@ -3,122 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para Luvieska</title>
+    <title>Para mi niña hermosa</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Quicksand:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        :root { --heart-red: #ff4d6d; --text-color: #5d4037; }
-        
         body { 
             margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; 
             min-height: 100vh; font-family: 'Quicksand', sans-serif; overflow: hidden;
-            /* TU IMAGEN DE FONDO */
             background: url('1000076521.png') no-repeat center center fixed; 
             background-size: cover;
         }
 
-        /* Capa para suavizar el fondo y leer mejor */
         body::before {
             content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.15); z-index: 0;
+            background: rgba(0, 0, 0, 0.4); z-index: 0;
         }
 
         .card { 
-            text-align: center; width: 95%; max-width: 500px; z-index: 10; 
-            background: rgba(255, 255, 255, 0.85); padding: 25px; border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center; width: 95%; max-width: 450px; z-index: 10; 
+            background: rgba(255, 255, 255, 0.9); padding: 25px; border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
         
         #message-area { 
             font-family: 'Dancing Script', cursive; font-size: 1.5rem; 
-            color: var(--text-color); min-height: 90px; margin-bottom: 10px;
-            line-height: 1.3; text-shadow: 1px 1px 1px white;
+            color: #4a332d; min-height: 90px; margin-bottom: 10px;
         }
 
-        .main-visual-container { 
-            display: flex; flex-direction: column; align-items: center; gap: 15px;
-        }
-
-        .visual-row { 
-            display: flex; align-items: flex-end; justify-content: center; gap: 15px; width: 100%;
+        .visual-container { 
+            position: relative; display: flex; justify-content: center; 
+            align-items: flex-end; gap: 10px; height: 260px; 
         }
 
         .photo-side { 
-            width: 120px; height: 165px; 
+            width: 110px; height: 155px; 
             background: url('nuestra-foto.jpg') center/cover;
-            border-radius: 15px; border: 4px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border-radius: 12px; border: 4px solid white;
         }
         
-        /* CONTENEDOR DEL ÁRBOL */
         .tree-wrapper { 
-            position: relative; width: 210px; height: 260px; 
+            position: relative; width: 200px; height: 250px; 
             background: url('arbol-artístico.png') no-repeat bottom center/contain;
         }
 
-        /* HOJAS DE CORAZÓN: Ahora sí nacen y se quedan en las ramas */
-        .leaf-heart {
-            position: absolute; color: var(--heart-red); pointer-events: none;
-            opacity: 0;
-            animation: stay-leaf 6s ease-in-out forwards;
+        .heart-leaf {
+            position: absolute; pointer-events: none; opacity: 0;
+            animation: grow-and-stay 5s ease-out forwards;
         }
 
-        /* Animación para que parezcan hojas, NO burbujas */
-        @keyframes stay-leaf {
+        @keyframes grow-and-stay {
             0% { transform: scale(0); opacity: 0; }
-            15% { opacity: 0.9; transform: scale(1.2) translateY(-5px); }
-            /* VIBRACIÓN ORGÁNICA EN LA RAMA: Mayor variación lateral y de altura */
-            80% { 
-                opacity: 0.8; 
-                transform: scale(1) translateY(calc(-30px + var(--move-y))) translateX(var(--move-x)) rotate(var(--rotate)); 
-            }
-            100% { opacity: 0; transform: scale(0.6) translateY(-40px); }
+            15% { opacity: 1; transform: scale(1.2); }
+            85% { opacity: 0.9; transform: scale(1) translate(var(--vx), var(--vy)); }
+            100% { opacity: 0; transform: scale(0); }
         }
 
-        #timer { font-weight: bold; font-size: 3rem; color: var(--heart-red); margin-top: 10px; }
+        #timer { font-weight: bold; font-size: 3rem; color: #ff4d6d; margin-top: 15px; }
     </style>
 </head>
 <body>
     <div class="card">
         <div id="message-area"></div>
-        <div class="main-visual-container">
-            <div class="visual-row">
-                <div class="photo-side"></div>
-                <div class="tree-wrapper" id="tree-canopy"></div>
-            </div>
-            <div id="timer">19 meses</div>
+        <div class="visual-container">
+            <div class="photo-side"></div>
+            <div class="tree-wrapper" id="tree-target"></div>
         </div>
+        <div id="timer">19 meses</div>
     </div>
 
     <script>
-        const text = "Cuanto más tiempo paso a tu lado me enamoro más de ti, feliz 19 meses amorcito ❤️";
+        const text = "Cuanto más tiempo paso a tu lado me enamoro más de ti, feliz 19 meses amorcito te amo demasiado ❤️";
         let i = 0;
-        function type() { if(i < text.length) { document.getElementById("message-area").innerHTML += text.charAt(i); i++; setTimeout(type, 60); } }
-
-        function createLeaf() {
-            const container = document.getElementById('tree-canopy');
-            const leaf = document.createElement('div');
-            leaf.classList.add('leaf-heart');
-            leaf.innerHTML = '❤';
-            
-            // COORDENADAS AJUSTADAS ESPECÍFICAMENTE A LA COPA DEL ÁRBOL RIZADO
-            const x = (Math.random() - 0.5) * 190; 
-            const y = Math.random() * 120 + 100; // Altura donde están las ramas rizadas
-            
-            leaf.style.left = `calc(50% + ${x}px)`;
-            leaf.style.bottom = `${y}px`;
-            
-            // Variables para la vibración orgánica en la copa
-            leaf.style.setProperty('--move-x', (Math.random() * 20 - 10) + 'px');
-            leaf.style.setProperty('--move-y', (Math.random() * 10 - 5) + 'px');
-            leaf.style.setProperty('--rotate', (Math.random() * 40 - 20) + 'deg');
-            leaf.style.fontSize = (Math.random() * 10 + 14) + 'px';
-
-            container.appendChild(leaf);
-            setTimeout(() => leaf.remove(), 6000);
+        function type() {
+            if (i < text.length) {
+                document.getElementById("message-area").innerHTML += text.charAt(i);
+                i++; setTimeout(type, 60);
+            }
         }
 
-        type();
-        // Genera hojas más seguido para llenar el árbol
-        setInterval(createLeaf, 120); 
+        function createHeartLeaf() {
+            const tree = document.getElementById('tree-target');
+            const heart = document.createElement('div');
+            heart.classList.add('heart-leaf');
+            heart.innerHTML = '❤';
+            
+            // PALETA DE COLORES ROMÁNTICOS
+            const colors = ['#ff4d6d', '#ff758f', '#c9184a', '#ff8fa3', '#800f2f', '#fb6f92'];
+            heart.style.color = colors[Math.floor(Math.random() * colors.length)];
+            
+            const x = (Math.random() - 0.5) * 170; 
+            const y = Math.random() * 110 + 105; 
+            
+            heart.style.left = `calc(50% + ${x}px)`;
+            heart.style.bottom = `${y}px`;
+            heart.style.setProperty('--vx', (Math.random() * 6 - 3) + 'px');
+            heart.style.setProperty('--vy', (Math.random() * 6 - 3) + 'px');
+            heart.style.fontSize = (Math.random() * 10 + 12) + 'px';
+
+            tree.appendChild(heart);
+            setTimeout(() => heart.remove(), 5000);
+        }
+
+        type(); 
+        setInterval(createHeartLeaf, 130); 
     </script>
 </body>
 </html>
