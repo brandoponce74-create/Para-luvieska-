@@ -20,10 +20,9 @@
             font-family: 'Quicksand', sans-serif;
         }
 
-        /* Texto superior con efecto de escritura */
         .texto-superior {
             width: 85%;
-            margin-top: 30px;
+            margin-top: 25px;
             text-align: center;
             min-height: 100px;
             z-index: 10;
@@ -34,62 +33,61 @@
             font-size: 1.6rem;
             color: #333;
             line-height: 1.3;
-            text-shadow: 0 0 15px rgba(255,255,255,0.9);
+            text-shadow: 0 0 10px rgba(255,255,255,0.8);
         }
 
-        /* CONTENEDOR DEL ÁRBOL MÁGICO */
+        /* CONTENEDOR DEL ÁRBOL */
         .tree-container {
             position: relative;
-            width: 300px;
-            height: 350px;
+            width: 350px;
+            height: 400px;
             display: flex;
             justify-content: center;
             align-items: flex-end;
         }
 
-        /* Estilo de las ramas (SVG) */
+        /* RAMAS ANIMADAS (SVG) */
         .branch {
             fill: none;
             stroke: #4e342e;
-            stroke-width: 3;
+            stroke-width: 4;
             stroke-linecap: round;
             stroke-dasharray: 1000;
             stroke-dashoffset: 1000;
-            animation: growBranch 3s ease-out forwards;
+            animation: growBranch 4s ease-out forwards;
         }
 
         @keyframes growBranch {
             to { stroke-dashoffset: 0; }
         }
 
-        /* CORAZONES QUE RELLENAN LA COPA */
+        /* HOJAS (1000 CORAZONES) */
         .leaf-heart {
             position: absolute;
             color: #ff4d6d;
-            font-size: 16px;
-            filter: drop-shadow(0 0 5px rgba(255, 77, 109, 0.6));
+            font-size: 12px;
+            filter: drop-shadow(0 0 3px rgba(255, 77, 109, 0.5));
             opacity: 0;
             transform: scale(0);
-            animation: popHeart 1s cubic-bezier(0.17, 0.89, 0.32, 1.49) forwards;
+            animation: pop 0.8s cubic-bezier(0.17, 0.89, 0.32, 1.49) forwards;
         }
 
-        @keyframes popHeart {
-            to { opacity: 1; transform: scale(1); }
+        @keyframes pop {
+            to { opacity: 0.9; transform: scale(1); }
         }
 
-        /* Brillos estilo YouTube */
-        .sparkle {
+        /* LLUVIA DE CORAZONES QUE CAEN */
+        .falling-heart {
             position: absolute;
-            color: #fff3b0;
-            font-size: 10px;
+            color: #ff758f;
             pointer-events: none;
-            animation: floatSparkle 4s linear infinite;
+            animation: fall 6s linear forwards;
         }
 
-        @keyframes floatSparkle {
-            0% { transform: translateY(0) scale(1); opacity: 0; }
-            50% { opacity: 1; }
-            100% { transform: translateY(-150px) translateX(20px); opacity: 0; }
+        @keyframes fall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            100% { transform: translateY(500px) rotate(360deg) translateX(var(--rx)); opacity: 0; }
         }
 
         .nuestra-foto {
@@ -103,15 +101,15 @@
             left: 5%;
             bottom: 12%;
             opacity: 0;
-            transform: rotate(-5deg) translateY(20px);
-            transition: all 1.2s ease-out;
+            transform: rotate(-5deg);
+            transition: all 1s ease-out;
         }
 
-        .contador-meses {
+        .contador {
             font-size: 3.5rem;
             color: #ff4d6d;
             font-weight: 800;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             opacity: 0;
             transition: opacity 2s;
         }
@@ -120,82 +118,80 @@
 <body>
 
     <div class="texto-superior">
-        <p id="typed-text"></p>
+        <p id="typed"></p>
     </div>
 
-    <div class="tree-container" id="tree-box">
+    <div class="tree-container" id="main-tree">
         <svg viewBox="0 0 200 200" width="100%" height="100%">
-            <path class="branch" d="M100,200 L100,140" style="stroke-width: 6;"/>
-            <path class="branch" d="M100,150 Q70,130 50,90" style="animation-delay: 1s;"/>
-            <path class="branch" d="M100,150 Q130,130 150,90" style="animation-delay: 1.2s;"/>
-            <path class="branch" d="M100,130 Q100,80 100,40" style="animation-delay: 1.5s;"/>
-            <path class="branch" d="M75,115 Q40,100 30,60" style="animation-delay: 2s;"/>
-            <path class="branch" d="M125,115 Q160,100 170,60" style="animation-delay: 2.2s;"/>
-            <path class="branch" d="M100,90 Q70,60 80,30" style="animation-delay: 2.5s;"/>
-            <path class="branch" d="M100,90 Q130,60 120,30" style="animation-delay: 2.7s;"/>
+            <path class="branch" d="M100,200 L100,130" style="stroke-width: 8;"/>
+            <path class="branch" d="M100,140 Q70,120 40,80" style="animation-delay: 0.5s;"/>
+            <path class="branch" d="M100,140 Q130,120 160,80" style="animation-delay: 0.7s;"/>
+            <path class="branch" d="M100,130 Q100,80 100,30" style="animation-delay: 1s;"/>
+            <path class="branch" d="M80,100 Q40,90 20,50" style="animation-delay: 1.5s;"/>
+            <path class="branch" d="M120,100 Q160,90 180,50" style="animation-delay: 1.7s;"/>
+            <path class="branch" d="M100,70 Q60,40 70,10" style="animation-delay: 2s;"/>
+            <path class="branch" d="M100,70 Q140,40 130,10" style="animation-delay: 2.2s;"/>
         </svg>
-        <div id="heart-layer"></div>
+        <div id="foliage"></div>
     </div>
 
-    <img src="nuestra-foto.jpg" alt="Pareja" class="nuestra-foto" id="love-img">
-    <div class="contador-meses" id="count-txt">19 meses</div>
+    <img src="nuestra-foto.jpg" alt="Amor" class="nuestra-foto" id="love-img">
+    <div class="contador" id="time-count">19 meses</div>
 
     <script>
-        const frase = "Cuanto más tiempo paso a tu lado me enamoro más de ti, feliz 19 meses amorcito te amo demasiado ❤️";
-        let charIndex = 0;
+        const texto = "Cuanto más tiempo paso a tu lado me enamoro más de ti, feliz 19 meses amorcito te amo demasiado ❤️";
+        let i = 0;
 
-        function typeWriter() {
-            if (charIndex < frase.length) {
-                document.getElementById("typed-text").innerHTML += frase.charAt(charIndex);
-                charIndex++;
-                setTimeout(typeWriter, 50);
+        function typing() {
+            if (i < texto.length) {
+                document.getElementById('typed').innerHTML += texto.charAt(i);
+                i++;
+                setTimeout(typing, 50);
             } else {
                 document.getElementById('love-img').style.opacity = "1";
-                document.getElementById('love-img').style.transform = "rotate(-5deg) translateY(0)";
-                document.getElementById('count-txt').style.opacity = "1";
+                document.getElementById('time-count').style.opacity = "1";
             }
         }
 
-        // Genera 100 corazones en las puntas de las ramas
-        function growHearts() {
-            const layer = document.getElementById('heart-layer');
-            const positions = [
-                {x:100, y:40}, {x:50, y:90}, {x:150, y:90}, {x:30, y:60}, 
-                {x:170, y:60}, {x:80, y:30}, {x:120, y:30}, {x:100, y:70}
-            ];
-
-            for(let i=0; i<80; i++) {
-                const heart = document.createElement('div');
-                heart.className = 'leaf-heart';
-                heart.innerHTML = '❤️';
+        // Crear 1000 hojas de corazón en forma de copa de corazón
+        function fillTree() {
+            const container = document.getElementById('foliage');
+            for (let j = 0; j < 1000; j++) {
+                const leaf = document.createElement('div');
+                leaf.className = 'leaf-heart';
+                leaf.innerHTML = '❤️';
                 
-                // Distribución aleatoria alrededor de los puntos finales de las ramas
-                const base = positions[Math.floor(Math.random() * positions.length)];
-                const offsetX = (Math.random() * 80 - 40);
-                const offsetY = (Math.random() * 80 - 40);
+                // Ecuación matemática para posicionar corazones en forma de corazón gigante
+                const t = Math.random() * 2 * Math.PI;
+                const r = Math.random() * 90;
+                // Forma de corazón: x = 16sin^3(t), y = 13cos(t) - 5cos(2t) - 2cos(3t) - cos(4t)
+                const x = 175 + (12 * Math.pow(Math.sin(t), 3)) * (r/10);
+                const y = 100 - (10 * Math.cos(t) - 4 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t)) * (r/10);
                 
-                heart.style.left = (base.x * 1.5 + offsetX) + 'px';
-                heart.style.top = (base.y * 1.5 + offsetY) + 'px';
-                heart.style.animationDelay = (3 + Math.random() * 2) + 's';
+                leaf.style.left = x + 'px';
+                leaf.style.top = y + 'px';
+                leaf.style.animationDelay = (2.5 + Math.random() * 3) + 's';
+                leaf.style.fontSize = (Math.random() * 10 + 5) + 'px';
                 
-                layer.appendChild(heart);
+                container.appendChild(leaf);
             }
         }
 
-        function createSparkle() {
-            const sparkle = document.createElement('div');
-            sparkle.className = 'sparkle';
-            sparkle.innerHTML = '✨';
-            sparkle.style.left = Math.random() * 100 + '%';
-            sparkle.style.bottom = '20%';
-            document.getElementById('tree-box').appendChild(sparkle);
-            setTimeout(() => sparkle.remove(), 4000);
+        function rain() {
+            const leaf = document.createElement('div');
+            leaf.className = 'falling-heart';
+            leaf.innerHTML = '❤️';
+            leaf.style.left = Math.random() * 100 + '%';
+            leaf.style.top = '100px';
+            leaf.style.setProperty('--rx', (Math.random() * 200 - 100) + 'px');
+            document.body.appendChild(leaf);
+            setTimeout(() => leaf.remove(), 6000);
         }
 
         window.onload = () => {
-            typeWriter();
-            growHearts();
-            setInterval(createSparkle, 500);
+            typing();
+            fillTree();
+            setInterval(rain, 300);
         };
     </script>
 </body>
