@@ -18,25 +18,37 @@
             overflow: hidden;
         }
 
-        .card { text-align: center; width: 90%; max-width: 400px; position: relative; }
+        .card { text-align: center; width: 90%; max-width: 400px; position: relative; z-index: 10; }
 
         #message-area {
             font-family: 'Dancing Script', cursive; font-size: 1.6rem;
-            color: var(--text-color); min-height: 100px; margin-bottom: 20px;
-            line-height: 1.4;
+            color: var(--text-color); min-height: 120px; margin-bottom: 10px;
+            line-height: 1.3; padding: 0 10px;
         }
 
         .tree-container {
-            position: relative; height: 300px; display: flex; justify-content: center; align-items: flex-end;
+            position: relative; height: 350px; display: flex; justify-content: center; align-items: flex-end;
+            margin-bottom: 20px;
         }
 
-        /* Tronco del árbol */
+        /* Imagen del Árbol */
         .trunk {
-            width: 20px; height: 140px; background-color: #795548; 
-            border-radius: 10px; z-index: 2; position: relative;
+            width: 280px; height: 300px; 
+            background-image: url('https://i.ibb.co/m90v7f0/tronco.png');
+            background-size: contain; background-repeat: no-repeat;
+            background-position: bottom; z-index: 2; position: relative;
         }
 
-        /* Corazones animados */
+        /* Imagen de los Ositos */
+        .bears {
+            width: 100px; height: 80px;
+            background-image: url('https://i.ibb.co/2Z87G9S/ositos.png');
+            background-size: contain; background-repeat: no-repeat;
+            position: absolute; bottom: 5px; left: 55%;
+            transform: translateX(-50%); z-index: 5;
+        }
+
+        /* Corazones */
         .heart {
             position: absolute; color: var(--heart-red); font-size: 22px;
             pointer-events: none; z-index: 3; animation: fall linear forwards;
@@ -45,11 +57,11 @@
         @keyframes fall {
             0% { transform: translateY(0) scale(0); opacity: 0; }
             20% { opacity: 1; transform: translateY(-20px) scale(1.3); }
-            100% { transform: translateY(-180px) translateX(calc(var(--x) * 1px)) scale(1); opacity: 0.7; }
+            100% { transform: translateY(-220px) translateX(calc(var(--x) * 1px)) scale(1.1); opacity: 0.7; }
         }
 
-        .counter-container { margin-top: 40px; color: var(--text-color); }
-        .counter-label { font-size: 0.9rem; margin-bottom: 5px; opacity: 0.8; }
+        .counter-container { color: var(--text-color); margin-top: 10px; }
+        .counter-label { font-size: 0.85rem; margin-bottom: 2px; opacity: 0.8; }
         #timer { font-weight: bold; font-size: 2.2rem; color: var(--heart-red); }
     </style>
 </head>
@@ -60,6 +72,7 @@
 
         <div class="tree-container" id="tree">
             <div class="trunk"></div>
+            <div class="bears"></div>
         </div>
 
         <div class="counter-container">
@@ -69,10 +82,10 @@
     </div>
 
     <script>
-        // 1. CONFIGURACIÓN: 3 de Agosto de 2024
+        // CONFIGURACIÓN: 3 de Agosto de 2024
         const startDate = new Date(2024, 7, 3); 
 
-        // 2. Efecto de Escritura
+        // Escritura automática
         const text = "Luvieska, si pudiera elegir un lugar seguro, sería a tu lado. Cuanto más tiempo estoy contigo, más te amo...";
         let index = 0;
 
@@ -80,39 +93,33 @@
             if (index < text.length) {
                 document.getElementById("message-area").innerHTML += text.charAt(index);
                 index++;
-                setTimeout(typeWriter, 70);
+                setTimeout(typeWriter, 75);
             }
         }
 
-        // 3. Contador de Meses Exactos
+        // Contador de meses
         function updateTimer() {
             const now = new Date();
-            
             let months = (now.getFullYear() - startDate.getFullYear()) * 12;
             months -= startDate.getMonth();
             months += now.getMonth();
-
-            // Ajuste si aún no se llega al día 3 del mes actual
-            if (now.getDate() < startDate.getDate()) {
-                months--;
-            }
+            if (now.getDate() < startDate.getDate()) months--;
 
             const textoMeses = months === 1 ? "mes" : "meses";
             document.getElementById('timer').innerHTML = `${months} ${textoMeses}`;
         }
 
-        // 4. Generador de Hojas de Corazón
+        // Corazones dispersos en el árbol
         function createHeart() {
             const tree = document.getElementById('tree');
             const heart = document.createElement('div');
             heart.classList.add('heart');
             heart.innerHTML = '❤';
             
-            // Dispersión horizontal aleatoria
-            const x = (Math.random() - 0.5) * 280; 
+            const x = (Math.random() - 0.5) * 220; 
             heart.style.setProperty('--x', x);
             heart.style.left = '50%';
-            heart.style.bottom = '80px';
+            heart.style.bottom = '120px';
             
             const duration = Math.random() * 2 + 3;
             heart.style.animationDuration = duration + 's';
@@ -121,10 +128,10 @@
             setTimeout(() => { heart.remove(); }, duration * 1000);
         }
 
-        // Iniciar
+        // Ejecución
         typeWriter();
         updateTimer();
-        setInterval(createHeart, 250); // Un corazón cada 0.25 seg
+        setInterval(createHeart, 200); 
     </script>
 </body>
 </html>
