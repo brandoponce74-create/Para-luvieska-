@@ -44,7 +44,7 @@
             z-index: 1;
         }
 
-        /* Corazones que suben y se expanden como hojas */
+        /* AJUSTE: Corazones que brotan y se dispersan por la copa */
         .heart { 
             position: absolute; color: var(--heart-red); 
             font-size: 18px; pointer-events: none; z-index: 2;
@@ -53,10 +53,10 @@
 
         @keyframes heart-growth {
             0% { transform: translateY(0) scale(0); opacity: 0; }
-            20% { opacity: 1; transform: translateY(-20px) scale(1.2); }
+            15% { opacity: 1; transform: translateY(-15px) scale(1.3); }
             100% { 
-                /* Sube hacia las ramas y se dispersa hacia los lados */
-                transform: translateY(-180px) translateX(calc(var(--x) * 1px)) scale(1); 
+                /* AJUSTE: Mayor rango de movimiento lateral (--x) y altura */
+                transform: translateY(-210px) translateX(calc(var(--x) * 1px)) scale(0.8); 
                 opacity: 0; 
             }
         }
@@ -78,7 +78,6 @@
     </div>
 
     <script>
-        // TU MENSAJE ACTUALIZADO
         const text = "Cuanto más tiempo paso a tu lado me enamoro más de ti, feliz 19 meses amorcito te amo demasiado y quiero cumplir muchos años más a tu lado mi niña hermosa ❤️";
         let index = 0;
 
@@ -94,13 +93,17 @@
             const container = document.getElementById('tree-container');
             const heart = document.createElement('div');
             heart.classList.add('heart');
-            heart.innerHTML = '❤';
             
-            // Los corazones brotan desde el centro del tronco
-            // y se dispersan hacia los lados (--x)
-            heart.style.setProperty('--x', (Math.random() - 0.5) * 180); 
+            // Variedad de tamaños de corazones para que se vea más natural
+            const sizes = ['❤', '♥', '❣'];
+            heart.innerHTML = sizes[Math.floor(Math.random() * sizes.length)];
+            
+            // AJUSTE: Dispersión aleatoria mucho más amplia para llenar las ramas
+            // Esto hace que unos vayan a la izquierda y otros a la derecha
+            heart.style.setProperty('--x', (Math.random() - 0.5) * 220); 
+            
             heart.style.left = '50%';
-            heart.style.bottom = '60px'; 
+            heart.style.bottom = '70px'; // Punto de salida en el tronco
             
             const dur = Math.random() * 2 + 2.5;
             heart.style.animationDuration = dur + 's';
@@ -110,8 +113,8 @@
         }
 
         typeWriter();
-        // Genera corazones más seguido para que el árbol se vea "lleno"
-        setInterval(createHeart, 150); 
+        // Genera corazones más rápido para que el árbol se vea más tupido
+        setInterval(createHeart, 120); 
     </script>
 </body>
 </html>
