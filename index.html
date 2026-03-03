@@ -11,7 +11,6 @@
             margin: 0;
             padding: 0;
             overflow: hidden;
-            /* Tu imagen de flores de fondo */
             background: url('1000076521.png') no-repeat center top;
             background-size: cover;
             height: 100vh;
@@ -21,12 +20,13 @@
             font-family: 'Quicksand', sans-serif;
         }
 
-        /* Bloque de texto superior */
+        /* Animación de aparición de texto */
         .texto-superior {
             width: 85%;
             margin-top: 40px;
             text-align: center;
             z-index: 10;
+            min-height: 100px;
         }
 
         .texto-superior p {
@@ -35,9 +35,14 @@
             color: #4a4a4a;
             line-height: 1.4;
             margin: 0;
+            opacity: 0;
+            animation: fadeIn 2s forwards;
         }
 
-        /* Contenedor para Foto y Árbol (medio) */
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
         .seccion-media {
             display: flex;
             justify-content: space-around;
@@ -48,6 +53,7 @@
             position: relative;
         }
 
+        /* Foto con entrada suave */
         .nuestra-foto {
             width: 150px;
             height: 180px;
@@ -56,37 +62,52 @@
             border: 6px solid white;
             box-shadow: 0 10px 20px rgba(0,0,0,0.2);
             z-index: 5;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUp 1.5s ease-out 1s forwards;
         }
 
+        /* Animación del Árbol (Se forma de abajo hacia arriba) */
         .arbol-container {
             position: relative;
             width: 180px;
             height: 200px;
+            overflow: hidden; /* Importante para que parezca que crece */
         }
 
         .arbol-img {
             width: 100%;
-            z-index: 2;
+            display: block;
             position: relative;
+            z-index: 2;
+            transform: translateY(100%);
+            animation: growTree 3s ease-out forwards;
         }
 
-        /* Contador inferior */
+        @keyframes growTree {
+            to { transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            to { opacity: 1; transform: translateY(0) rotate(-6deg); }
+        }
+
         .contador-abajo {
             font-size: 3.5rem;
             color: #ff4d6d;
             font-weight: 800;
             margin-bottom: 50px;
             z-index: 10;
-            text-shadow: 1px 1px 5px rgba(255,255,255,0.8);
+            opacity: 0;
+            animation: fadeIn 1s forwards 3s;
         }
 
-        /* Corazones saliendo del árbol */
+        /* Corazones (Solo empiezan después de que el árbol crece) */
         .corazon {
             position: absolute;
             color: #ff758f;
             z-index: 1;
             animation: brotar 4s ease-out forwards;
-            pointer-events: none;
         }
 
         @keyframes brotar {
@@ -99,19 +120,61 @@
 <body>
 
     <div class="texto-superior">
-        <p>Cuanto más tiempo paso a tu lado me enamoro más de ti, feliz <span id="meses-texto">19</span> meses amorcito te amo demasiado y quiero cumplir muchos años más a tu lado mi niña hermosa ❤️</p>
+        <p id="texto-animado"></p>
     </div>
 
     <div class="seccion-media">
         <img src="nuestra-foto.jpg" alt="Nosotros" class="nuestra-foto">
-        
-        <div class="arbol-container" id="contenedor-arbol">
+        <div class="arbol-container">
             <img src="arbol.png" alt="Árbol" class="arbol-img">
+            <div id="puntos-corazones"></div>
         </div>
     </div>
 
-    <div class="contador-abajo" id="contador-principal">19 meses</div>
+    <div class="contador-abajo" id="contador-principal">0 meses</div>
 
     <script>
+        const textoCompleto = "Cuanto más tiempo paso a tu lado me enamoro más de ti, feliz 19 meses amorcito te amo demasiado y quiero cumplir muchos años más a tu lado mi niña hermosa ❤️";
+        let i = 0;
+
+        // Función para escribir el texto letra por letra
+        function escribirTexto() {
+            if (i < textoCompleto.length) {
+                document.getElementById("texto-animado").innerHTML += textoCompleto.charAt(i);
+                i++;
+                setTimeout(escribirTexto, 50); // Velocidad de escritura
+            }
+        }
+
+        // Lógica del tiempo
         function actualizarTiempo() {
             const inicio = new Date('2024-08-03T00:00:00');
+            const ahora = new Date();
+            let meses = (ahora.getFullYear() - inicio.getFullYear()) * 12 + (ahora.getMonth() - inicio.getMonth());
+            if (ahora.getDate() < inicio.getDate()) meses--;
+            document.getElementById('contador-principal').innerText = `${meses} meses`;
+        }
+
+        function crearCorazon() {
+            const contenedor = document.getElementById('puntos-corazones');
+            const corazon = document.createElement('div');
+            corazon.classList.add('corazon');
+            corazon.innerHTML = '❤️';
+            corazon.style.left = Math.random() * 100 + 40 + 'px';
+            corazon.style.bottom = '100px';
+            corazon.style.setProperty('--random-x', (Math.random() * 80 - 40) + 'px');
+            contenedor.appendChild(corazon);
+            setTimeout(() => corazon.remove(), 4000);
+        }
+
+        // Iniciar animaciones al cargar
+        window.onload = () => {
+            actualizarTiempo();
+            setTimeout(escribirTexto, 500); // El texto empieza un poco después
+            setTimeout(() => {
+                setInterval(crearCorazon, 400); // Los corazones empiezan tras crecer el árbol
+            }, 2500);
+        };
+    </script>
+</body>
+</html>
