@@ -3,89 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para el amor de mi vida Luvieska</title>
+    <title>Para Luvieska</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Quicksand:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --pink-bg: #fce4ec;
-            --heart-red: #ff4d6d;
-            --text-color: #5d4037;
+        :root { --pink-bg: #fce4ec; --heart-red: #ff4d6d; --text-color: #5d4037; }
+        body { margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: var(--pink-bg); font-family: 'Quicksand', sans-serif; overflow: hidden; }
+        .card { text-align: center; width: 95%; max-width: 500px; }
+        #message-area { font-family: 'Dancing Script', cursive; font-size: 1.5rem; color: var(--text-color); min-height: 80px; margin-bottom: 20px; }
+        
+        /* Foto y Árbol Lado a Lado */
+        .duo-container { display: flex; justify-content: center; align-items: flex-end; gap: 20px; margin-bottom: 30px; }
+        
+        .photo-side { 
+            width: 140px; height: 180px; 
+            background-image: url('nuestra-foto.jpg'); 
+            background-size: cover; background-position: center;
+            border-radius: 15px; border: 4px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        .tree-side { 
+            position: relative; width: 180px; height: 220px; 
+            background-image: url('arbol-artístico.png'); /* Con tilde como tu archivo */
+            background-size: contain; background-repeat: no-repeat; background-position: bottom;
         }
 
-        body {
-            margin: 0; padding: 0; display: flex; justify-content: center; align-items: center;
-            min-height: 100vh; background-color: var(--pink-bg); font-family: 'Quicksand', sans-serif;
-            overflow: hidden;
-        }
-
-        .card { text-align: center; width: 90%; max-width: 400px; position: relative; z-index: 10; }
-
-        #message-area {
-            font-family: 'Dancing Script', cursive; font-size: 1.6rem;
-            color: var(--text-color); min-height: 120px; margin-bottom: 10px;
-            line-height: 1.3; padding: 0 10px;
-        }
-
-        .tree-container {
-            position: relative; height: 350px; display: flex; justify-content: center; align-items: flex-end;
-            margin-bottom: 20px;
-        }
-
-        /* Imagen del Árbol */
-        .trunk {
-            width: 280px; height: 300px; 
-            background-image: url('https://i.ibb.co/m90v7f0/tronco.png');
-            background-size: contain; background-repeat: no-repeat;
-            background-position: bottom; z-index: 2; position: relative;
-        }
-
-        /* Imagen de los Ositos */
-        .bears {
-            width: 100px; height: 80px;
-            background-image: url('https://i.ibb.co/2Z87G9S/ositos.png');
-            background-size: contain; background-repeat: no-repeat;
-            position: absolute; bottom: 5px; left: 55%;
-            transform: translateX(-50%); z-index: 5;
-        }
-
-        /* Corazones */
-        .heart {
-            position: absolute; color: var(--heart-red); font-size: 22px;
-            pointer-events: none; z-index: 3; animation: fall linear forwards;
-        }
-
+        .heart { position: absolute; color: var(--heart-red); font-size: 18px; pointer-events: none; animation: fall linear forwards; }
         @keyframes fall {
             0% { transform: translateY(0) scale(0); opacity: 0; }
-            20% { opacity: 1; transform: translateY(-20px) scale(1.3); }
-            100% { transform: translateY(-220px) translateX(calc(var(--x) * 1px)) scale(1.1); opacity: 0.7; }
+            10% { opacity: 1; transform: translateY(-10px) scale(1.2); }
+            100% { transform: translateY(-180px) translateX(calc(var(--x) * 1px)) scale(1); opacity: 0.5; }
         }
 
-        .counter-container { color: var(--text-color); margin-top: 10px; }
-        .counter-label { font-size: 0.85rem; margin-bottom: 2px; opacity: 0.8; }
-        #timer { font-weight: bold; font-size: 2.2rem; color: var(--heart-red); }
+        #timer { font-weight: bold; font-size: 2.5rem; color: var(--heart-red); }
     </style>
 </head>
 <body>
-
     <div class="card">
         <div id="message-area"></div>
-
-        <div class="tree-container" id="tree">
-            <div class="trunk"></div>
-            <div class="bears"></div>
+        <div class="duo-container">
+            <div class="photo-side"></div>
+            <div class="tree-side" id="tree"></div>
         </div>
-
-        <div class="counter-container">
-            <p class="counter-label">Nuestros caminos se cruzaron hace...</p>
-            <div id="timer">Calculando...</div>
-        </div>
+        <div id="timer">Calculando...</div>
     </div>
 
     <script>
-        // CONFIGURACIÓN: 3 de Agosto de 2024
-        const startDate = new Date(2024, 7, 3); 
-
-        // Escritura automática
+        const startDate = new Date(2024, 7, 3);
         const text = "Luvieska, si pudiera elegir un lugar seguro, sería a tu lado. Cuanto más tiempo estoy contigo, más te amo...";
         let index = 0;
 
@@ -93,45 +56,36 @@
             if (index < text.length) {
                 document.getElementById("message-area").innerHTML += text.charAt(index);
                 index++;
-                setTimeout(typeWriter, 75);
+                setTimeout(typeWriter, 70);
             }
         }
 
-        // Contador de meses
         function updateTimer() {
             const now = new Date();
             let months = (now.getFullYear() - startDate.getFullYear()) * 12;
             months -= startDate.getMonth();
             months += now.getMonth();
             if (now.getDate() < startDate.getDate()) months--;
-
-            const textoMeses = months === 1 ? "mes" : "meses";
-            document.getElementById('timer').innerHTML = `${months} ${textoMeses}`;
+            document.getElementById('timer').innerHTML = `${months} meses`;
         }
 
-        // Corazones dispersos en el árbol
         function createHeart() {
             const tree = document.getElementById('tree');
             const heart = document.createElement('div');
             heart.classList.add('heart');
             heart.innerHTML = '❤';
-            
-            const x = (Math.random() - 0.5) * 220; 
-            heart.style.setProperty('--x', x);
+            heart.style.setProperty('--x', (Math.random() - 0.5) * 150);
             heart.style.left = '50%';
-            heart.style.bottom = '120px';
-            
-            const duration = Math.random() * 2 + 3;
-            heart.style.animationDuration = duration + 's';
-
+            heart.style.bottom = '80px';
+            const dur = Math.random() * 2 + 3;
+            heart.style.animationDuration = dur + 's';
             tree.appendChild(heart);
-            setTimeout(() => { heart.remove(); }, duration * 1000);
+            setTimeout(() => heart.remove(), dur * 1000);
         }
 
-        // Ejecución
         typeWriter();
         updateTimer();
-        setInterval(createHeart, 200); 
+        setInterval(createHeart, 300);
     </script>
 </body>
 </html>
