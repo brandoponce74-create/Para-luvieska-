@@ -1,113 +1,105 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>Aniversario</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuestro Aniversario</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            /* Usamos tu imagen de flores como fondo */
+            background: url('1000076521.png') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
-<style>
-body{
-    margin:0;
-    width:100vw;
-    height:100vh;
-    background: black url("1000076521.png") no-repeat center center fixed;
-    background-size: cover;
-    overflow:hidden;
-    font-family: Arial, sans-serif;
-}
+        .contenedor {
+            position: relative;
+            text-align: center;
+        }
 
-/* CONTENEDOR CENTRAL */
-.scene{
-    position:absolute;
-    bottom:0;
-    left:50%;
-    transform:translateX(-50%);
-    width:320px;
-    height:500px;
-    z-index:2;
-}
+        /* Tu imagen del árbol */
+        .arbol {
+            width: 450px; /* Ajusta el tamaño según prefieras */
+            position: relative;
+            z-index: 2;
+        }
 
-/* ÁRBOL */
-.tree{
-    position:absolute;
-    bottom:0;
-    width:100%;
-    z-index:2;
-}
+        /* Tu foto de pareja */
+        .nuestra-foto {
+            width: 150px;
+            border-radius: 50%;
+            border: 5px solid white;
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 3;
+        }
 
-/* FOTO */
-.photo{
-    position:absolute;
-    bottom:200px;
-    left:50%;
-    transform:translateX(-50%);
-    width:130px;
-    border-radius:12px;
-    z-index:5;
-}
+        /* Estilo de los corazones animados */
+        .corazon {
+            position: absolute;
+            color: #ff4d6d;
+            font-size: 20px;
+            user-select: none;
+            z-index: 1;
+            animation: flotar 4s linear infinite;
+            opacity: 0;
+        }
 
-/* TEXTO */
-.texto{
-    position:absolute;
-    top:40px;
-    width:100%;
-    text-align:center;
-    color:#ffb3c1;
-    font-size:22px;
-    font-weight:bold;
-    text-shadow: 0 0 8px black;
-    z-index:10;
-}
-
-/* CORAZONES */
-.heart{
-    position:absolute;
-    z-index:8;
-    pointer-events:none;
-    animation: grow 6s linear forwards;
-}
-
-@keyframes grow{
-    0%{opacity:0; transform:scale(0);}
-    20%{opacity:1; transform:scale(1.2);}
-    100%{opacity:1; transform:scale(1);}
-}
-</style>
+        @keyframes flotar {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-300px) scale(1.5);
+                opacity: 0;
+            }
+        }
+    </style>
 </head>
-
 <body>
 
-<div class="texto">
-    ❤️ Feliz Aniversario ❤️<br>
-    Te amo con todo mi corazón
-</div>
+    <div class="contenedor" id="escena">
+        <img src="nuestra-foto.jpg" alt="Nosotros" class="nuestra-foto">
+        <img src="arbol.png" alt="Árbol" class="arbol">
+    </div>
 
-<div class="scene" id="treeArea">
-    <img src="arbol.png" class="tree">
-    <img src="nuestra-foto.jpg" class="photo">
-</div>
+    <script>
+        function crearCorazon() {
+            const escena = document.getElementById('escena');
+            const corazon = document.createElement('div');
+            corazon.classList.add('corazon');
+            corazon.innerHTML = '❤️'; // Puedes usar una imagen pequeña si prefieres
 
-<script>
-function createHeart(){
-    const area=document.getElementById("treeArea");
-    const heart=document.createElement("div");
-    heart.className="heart";
-    heart.textContent="❤";
+            // Posición aleatoria dentro del área del árbol
+            const x = Math.random() * 300 - 150; // Rango horizontal
+            const y = Math.random() * 200 + 50;  // Rango vertical desde la base
 
-    const colors=["#ff4d6d","#ff758f","#c9184a","#ffb3c1"];
-    heart.style.color=colors[Math.floor(Math.random()*colors.length)];
+            corazon.style.left = `calc(50% + ${x}px)`;
+            corazon.style.top = `${y}px`;
+            
+            // Tamaño y velocidad aleatoria
+            corazon.style.fontSize = Math.random() * 20 + 10 + 'px';
+            corazon.style.animationDuration = Math.random() * 3 + 2 + 's';
 
-    const x=(Math.random()-0.5)*200;
-    const y=Math.random()*140+200;
+            escena.appendChild(corazon);
 
-    heart.style.left="50%";
-    heart.style.bottom=y+"px";
-    heart.style.transform=`translateX(${x}px)`;
-    heart.style.fontSize=(Math.random()*14+16)+"px";
+            // Eliminar después de la animación para no saturar la memoria
+            setTimeout(() => {
+                corazon.remove();
+            }, 4000);
+        }
 
-    area.appendChild(heart);
-}
-setInterval(createHeart,150);
-</script>
-
+        // Crear un corazón cada 300 milisegundos
+        setInterval(crearCorazon, 300);
+    </script>
 </body>
 </html>
