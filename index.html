@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para mi amor eterno ❤️</title>
+    <title>19 Meses Juntos ❤️</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Quicksand:wght@700&display=swap');
 
@@ -22,176 +22,145 @@
 
         .texto-superior {
             width: 85%;
-            margin-top: 25px;
+            margin-top: 20px;
             text-align: center;
-            min-height: 100px;
-            z-index: 10;
+            min-height: 90px;
+            z-index: 100;
         }
 
         .texto-superior p {
             font-family: 'Dancing Script', cursive;
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             color: #333;
-            line-height: 1.3;
-            text-shadow: 0 0 10px rgba(255,255,255,0.8);
+            text-shadow: 0 0 10px white;
         }
 
-        /* CONTENEDOR DEL ÁRBOL */
+        /* ÁRBOL */
         .tree-container {
             position: relative;
-            width: 350px;
-            height: 400px;
+            width: 100%;
+            height: 50vh;
             display: flex;
             justify-content: center;
             align-items: flex-end;
         }
 
-        /* RAMAS ANIMADAS (SVG) */
         .branch {
             fill: none;
             stroke: #4e342e;
-            stroke-width: 4;
+            stroke-width: 5;
             stroke-linecap: round;
             stroke-dasharray: 1000;
             stroke-dashoffset: 1000;
-            animation: growBranch 4s ease-out forwards;
+            animation: grow 4s ease-out forwards;
         }
 
-        @keyframes growBranch {
-            to { stroke-dashoffset: 0; }
-        }
+        @keyframes grow { to { stroke-dashoffset: 0; } }
 
-        /* HOJAS (1000 CORAZONES) */
-        .leaf-heart {
+        /* CORAZONES DE COLORES */
+        .leaf {
             position: absolute;
-            color: #ff4d6d;
-            font-size: 12px;
-            filter: drop-shadow(0 0 3px rgba(255, 77, 109, 0.5));
             opacity: 0;
             transform: scale(0);
-            animation: pop 0.8s cubic-bezier(0.17, 0.89, 0.32, 1.49) forwards;
+            animation: pop 1s cubic-bezier(0.17, 0.89, 0.32, 1.49) forwards;
         }
 
-        @keyframes pop {
-            to { opacity: 0.9; transform: scale(1); }
-        }
+        @keyframes pop { to { opacity: 1; transform: scale(1); } }
 
-        /* LLUVIA DE CORAZONES QUE CAEN */
-        .falling-heart {
-            position: absolute;
-            color: #ff758f;
-            pointer-events: none;
-            animation: fall 6s linear forwards;
-        }
-
-        @keyframes fall {
-            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
-            10% { opacity: 1; }
-            100% { transform: translateY(500px) rotate(360deg) translateX(var(--rx)); opacity: 0; }
-        }
-
+        /* FOTO */
         .nuestra-foto {
-            width: 140px;
-            height: 180px;
+            width: 120px;
+            height: 160px;
             object-fit: cover;
             border-radius: 12px;
-            border: 5px solid white;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            border: 4px solid white;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.3);
             position: absolute;
             left: 5%;
-            bottom: 12%;
+            bottom: 15%;
             opacity: 0;
-            transform: rotate(-5deg);
-            transition: all 1s ease-out;
+            transition: 1.5s;
         }
 
-        .contador {
-            font-size: 3.5rem;
+        /* CONTADOR REUBICADO */
+        .contador-final {
+            position: fixed;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            font-size: 3.8rem;
             color: #ff4d6d;
-            font-weight: 800;
-            margin-bottom: 20px;
+            font-weight: 900;
+            text-shadow: 2px 2px 10px white;
             opacity: 0;
-            transition: opacity 2s;
+            transition: 2s;
+            z-index: 100;
         }
     </style>
 </head>
 <body>
 
     <div class="texto-superior">
-        <p id="typed"></p>
+        <p id="writer"></p>
     </div>
 
-    <div class="tree-container" id="main-tree">
-        <svg viewBox="0 0 200 200" width="100%" height="100%">
-            <path class="branch" d="M100,200 L100,130" style="stroke-width: 8;"/>
-            <path class="branch" d="M100,140 Q70,120 40,80" style="animation-delay: 0.5s;"/>
-            <path class="branch" d="M100,140 Q130,120 160,80" style="animation-delay: 0.7s;"/>
-            <path class="branch" d="M100,130 Q100,80 100,30" style="animation-delay: 1s;"/>
-            <path class="branch" d="M80,100 Q40,90 20,50" style="animation-delay: 1.5s;"/>
-            <path class="branch" d="M120,100 Q160,90 180,50" style="animation-delay: 1.7s;"/>
-            <path class="branch" d="M100,70 Q60,40 70,10" style="animation-delay: 2s;"/>
-            <path class="branch" d="M100,70 Q140,40 130,10" style="animation-delay: 2.2s;"/>
+    <div class="tree-container" id="tree-box">
+        <svg viewBox="0 0 200 200" width="300" height="300">
+            <path class="branch" d="M100,200 L100,120" style="stroke-width: 8;"/>
+            <path class="branch" d="M100,130 Q60,110 30,70" style="animation-delay: 0.5s;"/>
+            <path class="branch" d="M100,130 Q140,110 170,70" style="animation-delay: 0.8s;"/>
+            <path class="branch" d="M100,120 Q100,60 100,20" style="animation-delay: 1.2s;"/>
         </svg>
-        <div id="foliage"></div>
+        <div id="hearts-layer"></div>
     </div>
 
-    <img src="nuestra-foto.jpg" alt="Amor" class="nuestra-foto" id="love-img">
-    <div class="contador" id="time-count">19 meses</div>
+    <img src="nuestra-foto.jpg" alt="Amor" class="nuestra-foto" id="foto-amor">
+    <div class="contador-final" id="meses-tag">19 meses</div>
 
     <script>
-        const texto = "Cuanto más tiempo paso a tu lado me enamoro más de ti, feliz 19 meses amorcito te amo demasiado ❤️";
-        let i = 0;
+        const frase = "Cuanto más tiempo paso a tu lado me enamoro más de ti, feliz 19 meses amorcito te amo demasiado ❤️";
+        let speed = 50;
+        let char = 0;
 
-        function typing() {
-            if (i < texto.length) {
-                document.getElementById('typed').innerHTML += texto.charAt(i);
-                i++;
-                setTimeout(typing, 50);
+        function type() {
+            if (char < frase.length) {
+                document.getElementById('writer').innerHTML += frase.charAt(char);
+                char++;
+                setTimeout(type, speed);
             } else {
-                document.getElementById('love-img').style.opacity = "1";
-                document.getElementById('time-count').style.opacity = "1";
+                document.getElementById('foto-amor').style.opacity = "1";
+                document.getElementById('meses-tag').style.opacity = "1";
             }
         }
 
-        // Crear 1000 hojas de corazón en forma de copa de corazón
-        function fillTree() {
-            const container = document.getElementById('foliage');
-            for (let j = 0; j < 1000; j++) {
-                const leaf = document.createElement('div');
-                leaf.className = 'leaf-heart';
-                leaf.innerHTML = '❤️';
+        function createHearts() {
+            const layer = document.getElementById('hearts-layer');
+            const colors = ['#ff4d6d', '#ff758f', '#c9184a', '#ffb3c1', '#ffd60a', '#9d4edd'];
+            
+            for (let i = 0; i < 1500; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'leaf';
+                heart.innerHTML = '❤️';
+                heart.style.color = colors[Math.floor(Math.random() * colors.length)];
                 
-                // Ecuación matemática para posicionar corazones en forma de corazón gigante
+                // Distribución en forma de corazón grande
                 const t = Math.random() * 2 * Math.PI;
-                const r = Math.random() * 90;
-                // Forma de corazón: x = 16sin^3(t), y = 13cos(t) - 5cos(2t) - 2cos(3t) - cos(4t)
-                const x = 175 + (12 * Math.pow(Math.sin(t), 3)) * (r/10);
-                const y = 100 - (10 * Math.cos(t) - 4 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t)) * (r/10);
+                const r = Math.random() * 110;
+                const x = window.innerWidth/2 + (16 * Math.pow(Math.sin(t), 3)) * (r/10);
+                const y = 250 - (13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t)) * (r/10);
                 
-                leaf.style.left = x + 'px';
-                leaf.style.top = y + 'px';
-                leaf.style.animationDelay = (2.5 + Math.random() * 3) + 's';
-                leaf.style.fontSize = (Math.random() * 10 + 5) + 'px';
+                heart.style.left = x + 'px';
+                heart.style.top = y + 'px';
+                heart.style.fontSize = (Math.random() * 12 + 6) + 'px';
+                heart.style.animationDelay = (2 + Math.random() * 4) + 's';
                 
-                container.appendChild(leaf);
+                layer.appendChild(heart);
             }
-        }
-
-        function rain() {
-            const leaf = document.createElement('div');
-            leaf.className = 'falling-heart';
-            leaf.innerHTML = '❤️';
-            leaf.style.left = Math.random() * 100 + '%';
-            leaf.style.top = '100px';
-            leaf.style.setProperty('--rx', (Math.random() * 200 - 100) + 'px');
-            document.body.appendChild(leaf);
-            setTimeout(() => leaf.remove(), 6000);
         }
 
         window.onload = () => {
-            typing();
-            fillTree();
-            setInterval(rain, 300);
+            type();
+            createHearts();
         };
     </script>
 </body>
