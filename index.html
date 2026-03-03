@@ -3,9 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para mi niña hermosa ❤️</title>
+    <title>Para mi amor ❤️</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Quicksand:wght@700&display=swap');
+
+        :root {
+            --color-pink: #ff4d6d;
+            --speed: 2s;
+        }
 
         body {
             margin: 0;
@@ -20,157 +25,170 @@
             font-family: 'Quicksand', sans-serif;
         }
 
+        /* Texto superior estilo máquina de escribir */
         .texto-superior {
-            width: 90%;
-            margin-top: 20px;
+            width: 85%;
+            margin-top: 30px;
             text-align: center;
-            min-height: 100px;
-            z-index: 100;
+            min-height: 80px;
+            z-index: 10;
         }
 
         .texto-superior p {
             font-family: 'Dancing Script', cursive;
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             color: #333;
-            line-height: 1.2;
         }
 
-        #canvas-container {
+        /* CONTENEDOR DE LA PLANTA (ESTILO YOUTUBE) */
+        .flower-container {
             position: relative;
-            width: 100%;
-            height: 60vh;
+            width: 200px;
+            height: 300px;
             display: flex;
             justify-content: center;
             align-items: flex-end;
+            margin-bottom: 20px;
         }
 
-        canvas {
-            display: block;
+        /* El tallo que crece hacia arriba */
+        .stem {
+            width: 6px;
+            height: 0;
+            background: linear-gradient(to top, #4e342e, #8d6e63);
+            border-radius: 10px;
+            position: absolute;
+            bottom: 0;
+            animation: growStem 2s ease-out forwards;
         }
 
+        @keyframes growStem {
+            to { height: 200px; }
+        }
+
+        /* Hojas que brotan lateralmente */
+        .leaf {
+            position: absolute;
+            width: 40px;
+            height: 20px;
+            background: #ff758f;
+            border-radius: 50% 0 50% 0;
+            opacity: 0;
+            transform: scale(0);
+            animation: bloom 1s ease-out forwards;
+        }
+
+        .leaf.left { left: -35px; transform: rotate(-30deg); border-radius: 0 50% 0 50%; }
+        .leaf.right { right: -35px; transform: rotate(30deg); }
+
+        @keyframes bloom {
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Flor brillante superior */
+        .flower-head {
+            position: absolute;
+            top: -25px;
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 20px var(--color-pink);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 25px;
+            opacity: 0;
+            animation: bloom 1.5s ease-out 2s forwards;
+        }
+
+        /* Foto de la pareja */
         .nuestra-foto {
-            width: 130px;
-            height: 170px;
+            width: 120px;
+            height: 160px;
             object-fit: cover;
-            border-radius: 15px;
-            border: 5px solid white;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            border-radius: 10px;
+            border: 4px solid white;
             position: absolute;
             left: 5%;
-            bottom: 20%;
+            bottom: 15%;
             opacity: 0;
-            transform: scale(0.5) rotate(-10deg);
-            transition: all 1.5s ease-in-out;
+            transform: translateY(20px);
+            transition: all 1s ease-out;
         }
 
-        .corazon-volando {
-            position: absolute;
-            color: #ff4d6d;
-            font-size: 14px;
-            pointer-events: none;
-            animation: caer 5s linear forwards;
-        }
-
-        @keyframes caer {
-            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
-            10% { opacity: 1; }
-            100% { transform: translateY(500px) rotate(360deg) translateX(var(--rx)); opacity: 0; }
-        }
-
-        .contador-pie {
-            font-size: 3.2rem;
-            color: #ff4d6d;
+        /* Contador */
+        .contador-abajo {
+            font-size: 3rem;
+            color: var(--color-pink);
             font-weight: 800;
-            margin-bottom: 30px;
             opacity: 0;
             transition: opacity 2s;
+        }
+
+        /* Corazones flotantes (partículas de luz del video) */
+        .glow {
+            position: absolute;
+            color: gold;
+            font-size: 10px;
+            pointer-events: none;
+            animation: fly 3s linear infinite;
+        }
+
+        @keyframes fly {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-100px) translateX(20px); opacity: 0; }
         }
     </style>
 </head>
 <body>
 
     <div class="texto-superior">
-        <p id="escritura"></p>
+        <p id="typed"></p>
     </div>
 
-    <div id="canvas-container">
-        <img src="nuestra-foto.jpg" alt="Amor" class="nuestra-foto" id="mifoto">
-        <canvas id="treeCanvas"></canvas>
+    <div class="flower-container" id="flower-box">
+        <div class="stem">
+            <div class="leaf left" style="bottom: 50px; animation-delay: 0.5s;"></div>
+            <div class="leaf right" style="bottom: 80px; animation-delay: 0.8s;"></div>
+            <div class="leaf left" style="bottom: 120px; animation-delay: 1.2s;"></div>
+            <div class="leaf right" style="bottom: 150px; animation-delay: 1.5s;"></div>
+            <div class="flower-head">❤️</div>
+        </div>
     </div>
 
-    <div class="contador-pie" id="meses_txt">19 meses</div>
+    <img src="nuestra-foto.jpg" alt="Amor" class="nuestra-foto" id="foto">
+
+    <div class="contador-abajo" id="count">19 meses</div>
 
     <script>
-        const canvas = document.getElementById('treeCanvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = 400;
+        const frase = "Cuanto más tiempo paso a tu lado me enamoro más de ti, feliz 19 meses amorcito ❤️";
+        let idx = 0;
 
-        const frase = "Cuanto más tiempo paso a tu lado me enamoro más de ti, feliz 19 meses amorcito te amo demasiado y quiero cumplir muchos años más a tu lado mi niña hermosa ❤️";
-        let i = 0;
-
-        // 1. Escritura automática
-        function escribirTexto() {
-            if (i < frase.length) {
-                document.getElementById("escritura").innerHTML += frase.charAt(i);
-                i++;
-                setTimeout(escribirTexto, 40);
+        function typing() {
+            if (idx < frase.length) {
+                document.getElementById('typed').innerHTML += frase.charAt(idx);
+                idx++;
+                setTimeout(typing, 60);
             } else {
-                document.getElementById('mifoto').style.opacity = "1";
-                document.getElementById('mifoto').style.transform = "scale(1) rotate(-6deg)";
-                document.getElementById('meses_txt').style.opacity = "1";
+                document.getElementById('foto').style.opacity = "1";
+                document.getElementById('foto').style.transform = "translateY(0)";
+                document.getElementById('count').style.opacity = "1";
             }
         }
 
-        // 2. Función para dibujar el árbol con MUCHAS ramas
-        function drawBranch(x, y, len, angle, width) {
-            ctx.beginPath();
-            ctx.save();
-            ctx.strokeStyle = "#4e342e";
-            ctx.lineWidth = width;
-            ctx.translate(x, y);
-            ctx.rotate(angle * Math.PI / 180);
-            ctx.moveTo(0, 0);
-            ctx.lineTo(0, -len);
-            ctx.stroke();
-
-            if (len < 10) {
-                // Dibuja la hoja (corazón)
-                ctx.fillStyle = "#ff4d6d";
-                ctx.font = "12px Arial";
-                ctx.fillText("❤️", -6, -len);
-                ctx.restore();
-                return;
-            }
-
-            // Aquí está la ramificación: crea 3 ramas por cada una
-            setTimeout(() => {
-                drawBranch(0, -len, len * 0.8, angle - 25, width * 0.7);
-                drawBranch(0, -len, len * 0.8, angle + 25, width * 0.7);
-                drawBranch(0, -len, len * 0.6, angle + 2, width * 0.7);
-            }, 50);
-
-            ctx.restore();
-        }
-
-        // 3. Corazones que caen
-        function lluvia() {
-            const container = document.getElementById('canvas-container');
-            const c = document.createElement('div');
-            c.className = 'corazon-volando';
-            c.innerHTML = '❤️';
-            c.style.left = Math.random() * 100 + '%';
-            c.style.top = '0px';
-            c.style.setProperty('--rx', (Math.random() * 200 - 100) + 'px');
-            container.appendChild(c);
-            setTimeout(() => c.remove(), 5000);
+        function createGlow() {
+            const glow = document.createElement('div');
+            glow.className = 'glow';
+            glow.innerHTML = '✨';
+            glow.style.left = Math.random() * 100 + '%';
+            document.getElementById('flower-box').appendChild(glow);
+            setTimeout(() => glow.remove(), 3000);
         }
 
         window.onload = () => {
-            escribirTexto();
-            // Inicia el árbol en el centro del canvas
-            drawBranch(canvas.width / 2, canvas.height, 70, 0, 7);
-            setInterval(lluvia, 400);
+            typing();
+            setInterval(createGlow, 500);
         };
     </script>
 </body>
