@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para mi amor ❤️</title>
+    <title>Aniversario con Árbol Real ❤️</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Quicksand:wght@700&display=swap');
 
@@ -21,199 +21,163 @@
         }
 
         .texto-superior {
-            width: 85%;
-            margin-top: 30px;
+            width: 90%;
+            margin-top: 20px;
             text-align: center;
             min-height: 100px;
-            z-index: 10;
+            z-index: 100;
         }
 
         .texto-superior p {
             font-family: 'Dancing Script', cursive;
             font-size: 1.6rem;
             color: #333;
-            line-height: 1.3;
+            line-height: 1.2;
         }
 
-        .seccion-media {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            width: 100%;
-            flex-grow: 1;
+        .contenedor-central {
             position: relative;
+            width: 100%;
+            height: 60vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+        }
+
+        canvas {
+            display: block;
+            z-index: 5;
         }
 
         .nuestra-foto {
-            width: 140px;
-            height: 180px;
+            width: 130px;
+            height: 170px;
             object-fit: cover;
-            border-radius: 12px;
+            border-radius: 15px;
             border: 5px solid white;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            position: absolute;
+            left: 5%;
+            bottom: 50px;
             opacity: 0;
-            transform: scale(0.5);
+            transform: scale(0.5) rotate(-10deg);
             transition: all 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 50;
         }
 
-        /* CONTENEDOR DEL ÁRBOL */
-        .arbol-svg-container {
-            width: 300px;
-            height: 350px;
-            position: relative;
-        }
-
-        .rama {
-            fill: none;
-            stroke: #5d4037;
-            stroke-width: 2;
-            stroke-linecap: round;
-            stroke-dasharray: 1000;
-            stroke-dashoffset: 1000;
-            animation: crecerRama 4s ease-out forwards;
-        }
-
-        @keyframes crecerRama {
-            to { stroke-dashoffset: 0; }
-        }
-
-        /* HOJAS QUE RELLENAN EL ÁRBOL */
-        .hoja-fija {
+        .hoja-caida {
             position: absolute;
             color: #ff4d6d;
-            font-size: 12px;
-            opacity: 0;
-            animation: aparecerHoja 2s ease-out forwards;
-        }
-
-        @keyframes aparecerHoja {
-            to { opacity: 0.8; }
-        }
-
-        /* CORAZONES QUE CAEN */
-        .corazon-caida {
-            position: absolute;
-            color: #ff758f;
+            font-size: 14px;
             pointer-events: none;
-            z-index: 1;
+            z-index: 10;
             animation: caer 6s linear forwards;
         }
 
         @keyframes caer {
             0% { transform: translateY(0) rotate(0deg); opacity: 0; }
             10% { opacity: 1; }
-            100% { transform: translateY(400px) rotate(360deg) translateX(var(--x)); opacity: 0; }
+            100% { transform: translateY(500px) rotate(360deg) translateX(var(--rx)); opacity: 0; }
         }
 
         .contador-pie {
-            font-size: 3rem;
+            font-size: 3.5rem;
             color: #ff4d6d;
             font-weight: 800;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             opacity: 0;
             transition: opacity 2s;
+            z-index: 100;
         }
     </style>
 </head>
 <body>
 
     <div class="texto-superior">
-        <p id="typed"></p>
+        <p id="typewriter"></p>
     </div>
 
-    <div class="seccion-media">
-        <img src="nuestra-foto.jpg" alt="Amor" class="nuestra-foto" id="foto-amor">
-        
-        <div class="arbol-svg-container" id="arbol-box">
-            <svg viewBox="0 0 200 200" width="100%" height="100%" id="arbol-svg">
-                </svg>
-            <div id="capa-hojas"></div>
-            <div id="capa-caida"></div>
-        </div>
+    <div class="contenedor-central">
+        <img src="nuestra-foto.jpg" alt="Amor" class="nuestra-foto" id="foto">
+        <canvas id="treeCanvas"></canvas>
     </div>
 
-    <div class="contador-pie" id="meses-display">19 meses</div>
+    <div class="contador-pie" id="meses">19 meses</div>
 
     <script>
-        const texto = "Cuanto más tiempo paso a tu lado me enamoro más de ti, feliz 19 meses amorcito te amo demasiado y quiero cumplir muchos años más a tu lado mi niña hermosa ❤️";
-        let charIndex = 0;
+        const canvas = document.getElementById('treeCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = 400;
+        canvas.height = 450;
 
-        function typeWriter() {
-            if (charIndex < texto.length) {
-                document.getElementById("typed").innerHTML += texto.charAt(charIndex);
-                charIndex++;
-                setTimeout(typeWriter, 50);
+        const frase = "Cuanto más tiempo paso a tu lado me enamoro más de ti, feliz 19 meses amorcito te amo demasiado y quiero cumplir muchos años más a tu lado mi niña hermosa ❤️";
+        let charIdx = 0;
+
+        // 1. Efecto Escritura
+        function escribir() {
+            if (charIdx < frase.length) {
+                document.getElementById("typewriter").innerHTML += frase.charAt(charIdx);
+                charIdx++;
+                setTimeout(escribir, 50);
             } else {
-                document.getElementById('foto-amor').style.opacity = "1";
-                document.getElementById('foto-amor').style.transform = "scale(1) rotate(-5deg)";
-                document.getElementById('meses-display').style.opacity = "1";
+                document.getElementById('foto').style.opacity = "1";
+                document.getElementById('foto').style.transform = "scale(1) rotate(-6deg)";
+                document.getElementById('meses').style.opacity = "1";
             }
         }
 
-        // Función para crear muchas hojas de corazón fijas en el árbol
-        function rellenarArbol() {
-            const capaHojas = document.getElementById('capa-hojas');
-            for (let i = 0; i < 150; i++) {
-                const hoja = document.createElement('div');
-                hoja.className = 'hoja-fija';
-                hoja.innerHTML = '❤️';
-                
-                // Distribución en forma de copa de árbol
-                const angle = Math.random() * Math.PI * 2;
-                const radius = Math.random() * 80;
-                const x = 150 + Math.cos(angle) * radius;
-                const y = 120 + Math.sin(angle) * (radius * 0.8);
-                
-                hoja.style.left = x + 'px';
-                hoja.style.top = y + 'px';
-                hoja.style.animationDelay = (Math.random() * 3 + 2) + 's';
-                
-                capaHojas.appendChild(hoja);
+        // 2. Función Fractal para Ramificar el Árbol (Vida real)
+        function drawTree(startX, startY, len, angle, branchWidth) {
+            ctx.beginPath();
+            ctx.save();
+            ctx.strokeStyle = "#4e342e";
+            ctx.lineWidth = branchWidth;
+            ctx.translate(startX, startY);
+            ctx.rotate(angle * Math.PI / 180);
+            ctx.moveTo(0, 0);
+            ctx.lineTo(0, -len);
+            ctx.stroke();
+
+            if (len < 15) {
+                // Dibujar hoja de corazón al final de la ramita
+                ctx.fillStyle = "#ff4d6d";
+                ctx.font = "10px Arial";
+                ctx.fillText("❤️", -5, -len);
+                ctx.restore();
+                return;
             }
+
+            // Ramificar!
+            setTimeout(() => {
+                drawTree(0, -len, len * 0.75, angle - 20, branchWidth * 0.7);
+                drawTree(0, -len, len * 0.75, angle + 20, branchWidth * 0.7);
+            }, 100);
+
+            ctx.restore();
         }
 
-        function crearCorazonCaida() {
-            const capaCaida = document.getElementById('capa-caida');
+        // 3. Lluvia de corazones
+        function crearLluvia() {
+            const contenedor = document.querySelector('.contenedor-central');
             const corazon = document.createElement('div');
-            corazon.className = 'corazon-caida';
+            corazon.className = 'hoja-caida';
             corazon.innerHTML = '❤️';
-            
-            corazon.style.left = (Math.random() * 200 + 50) + 'px';
+            corazon.style.left = (Math.random() * 80 + 10) + '%';
             corazon.style.top = '100px';
-            corazon.style.setProperty('--x', (Math.random() * 120 - 60) + 'px');
-            corazon.style.fontSize = (Math.random() * 10 + 10) + 'px';
-            
-            capaCaida.appendChild(corazon);
+            corazon.style.setProperty('--rx', (Math.random() * 200 - 100) + 'px');
+            contenedor.appendChild(corazon);
             setTimeout(() => corazon.remove(), 6000);
         }
 
-        // Generar ramas densas en el SVG
-        function dibujarRamas() {
-            const svg = document.getElementById('arbol-svg');
-            const ramas = [
-                "M100,200 L100,150", // Tronco
-                "M100,160 Q80,140 60,110", "M100,160 Q120,140 140,110", // Ramas principales
-                "M80,135 Q60,120 45,95", "M120,135 Q140,120 155,95", // Ramas secundarias
-                "M100,150 Q100,110 100,70", // Centro
-                "M90,120 Q70,90 80,60", "M110,120 Q130,90 120,60" // Ramas superiores
-            ];
-            
-            ramas.forEach((d, i) => {
-                const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-                path.setAttribute("d", d);
-                path.setAttribute("class", "rama");
-                path.style.animationDelay = (i * 0.3) + "s";
-                svg.appendChild(path);
-            });
-        }
-
         window.onload = () => {
-            dibujarRamas();
-            typeWriter();
-            rellenarArbol();
+            escribir();
+            // Iniciar dibujo del árbol desde el centro abajo
+            drawTree(200, 450, 80, 0, 8);
+            
+            // Iniciar lluvia después de que el árbol empiece a crecer
             setTimeout(() => {
-                setInterval(crearCorazonCaida, 500);
-            }, 3000);
+                setInterval(crearLluvia, 400);
+            }, 2000);
         };
     </script>
 </body>
