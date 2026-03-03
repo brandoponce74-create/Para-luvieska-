@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para el amor de mi vida Luvieska</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Quicksand:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pink-bg: #fce4ec;
+            --heart-red: #ff4d6d;
+            --text-color: #5d4037;
+        }
+
+        body {
+            margin: 0; padding: 0; display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; background-color: var(--pink-bg); font-family: 'Quicksand', sans-serif;
+            overflow: hidden;
+        }
+
+        .card { text-align: center; width: 90%; max-width: 400px; position: relative; }
+
+        #message-area {
+            font-family: 'Dancing Script', cursive; font-size: 1.6rem;
+            color: var(--text-color); min-height: 100px; margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .tree-container {
+            position: relative; height: 300px; display: flex; justify-content: center; align-items: flex-end;
+        }
+
+        /* Tronco del árbol */
+        .trunk {
+            width: 20px; height: 140px; background-color: #795548; 
+            border-radius: 10px; z-index: 2; position: relative;
+        }
+
+        /* Corazones animados */
+        .heart {
+            position: absolute; color: var(--heart-red); font-size: 22px;
+            pointer-events: none; z-index: 3; animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(0) scale(0); opacity: 0; }
+            20% { opacity: 1; transform: translateY(-20px) scale(1.3); }
+            100% { transform: translateY(-180px) translateX(calc(var(--x) * 1px)) scale(1); opacity: 0.7; }
+        }
+
+        .counter-container { margin-top: 40px; color: var(--text-color); }
+        .counter-label { font-size: 0.9rem; margin-bottom: 5px; opacity: 0.8; }
+        #timer { font-weight: bold; font-size: 2.2rem; color: var(--heart-red); }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div id="message-area"></div>
+
+        <div class="tree-container" id="tree">
+            <div class="trunk"></div>
+        </div>
+
+        <div class="counter-container">
+            <p class="counter-label">Nuestros caminos se cruzaron hace...</p>
+            <div id="timer">Calculando...</div>
+        </div>
+    </div>
+
+    <script>
+        // 1. CONFIGURACIÓN: 3 de Agosto de 2024
+        const startDate = new Date(2024, 7, 3); 
+
+        // 2. Efecto de Escritura
+        const text = "Luvieska, si pudiera elegir un lugar seguro, sería a tu lado. Cuanto más tiempo estoy contigo, más te amo...";
+        let index = 0;
+
+        function typeWriter() {
+            if (index < text.length) {
+                document.getElementById("message-area").innerHTML += text.charAt(index);
+                index++;
+                setTimeout(typeWriter, 70);
+            }
+        }
+
+        // 3. Contador de Meses Exactos
+        function updateTimer() {
+            const now = new Date();
+            
+            let months = (now.getFullYear() - startDate.getFullYear()) * 12;
+            months -= startDate.getMonth();
+            months += now.getMonth();
+
+            // Ajuste si aún no se llega al día 3 del mes actual
+            if (now.getDate() < startDate.getDate()) {
+                months--;
+            }
+
+            const textoMeses = months === 1 ? "mes" : "meses";
+            document.getElementById('timer').innerHTML = `${months} ${textoMeses}`;
+        }
+
+        // 4. Generador de Hojas de Corazón
+        function createHeart() {
+            const tree = document.getElementById('tree');
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤';
+            
+            // Dispersión horizontal aleatoria
+            const x = (Math.random() - 0.5) * 280; 
+            heart.style.setProperty('--x', x);
+            heart.style.left = '50%';
+            heart.style.bottom = '80px';
+            
+            const duration = Math.random() * 2 + 3;
+            heart.style.animationDuration = duration + 's';
+
+            tree.appendChild(heart);
+            setTimeout(() => { heart.remove(); }, duration * 1000);
+        }
+
+        // Iniciar
+        typeWriter();
+        updateTimer();
+        setInterval(createHeart, 250); // Un corazón cada 0.25 seg
+    </script>
+</body>
+</html>
