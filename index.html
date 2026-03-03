@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aniversario ❤️</title>
+    <title>Para mi niña hermosa ❤️</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Quicksand:wght@700&display=swap');
 
@@ -11,7 +11,7 @@
             margin: 0;
             padding: 0;
             overflow: hidden;
-            background: url('1000076521.png') no-repeat center top;
+            background: url('1000076521.png') no-repeat center center fixed;
             background-size: cover;
             height: 100vh;
             display: flex;
@@ -20,13 +20,13 @@
             font-family: 'Quicksand', sans-serif;
         }
 
-        /* Animación de aparición de texto */
+        /* Contenedor del texto con efecto de escritura */
         .texto-superior {
             width: 85%;
-            margin-top: 40px;
+            margin-top: 50px;
             text-align: center;
+            min-height: 120px;
             z-index: 10;
-            min-height: 100px;
         }
 
         .texto-superior p {
@@ -35,12 +35,18 @@
             color: #4a4a4a;
             line-height: 1.4;
             margin: 0;
-            opacity: 0;
-            animation: fadeIn 2s forwards;
+            display: inline;
         }
 
-        @keyframes fadeIn {
-            to { opacity: 1; }
+        /* El cursor que parpadea mientras se escribe */
+        .cursor {
+            border-left: 3px solid #ff4d6d;
+            margin-left: 5px;
+            animation: parpadeo 0.7s infinite;
+        }
+
+        @keyframes parpadeo {
+            50% { border-color: transparent; }
         }
 
         .seccion-media {
@@ -49,131 +55,136 @@
             align-items: flex-end;
             width: 100%;
             flex-grow: 1;
-            padding-bottom: 20px;
+            padding-bottom: 40px;
             position: relative;
         }
 
-        /* Foto con entrada suave */
+        /* La foto aparece después de un rato */
         .nuestra-foto {
-            width: 150px;
-            height: 180px;
+            width: 160px;
+            height: 200px;
             object-fit: cover;
             border-radius: 15px;
             border: 6px solid white;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-            z-index: 5;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
             opacity: 0;
-            transform: translateY(20px);
-            animation: slideUp 1.5s ease-out 1s forwards;
+            transform: translateY(30px) rotate(-5deg);
+            transition: all 1.5s ease-out;
         }
 
-        /* Animación del Árbol (Se forma de abajo hacia arriba) */
+        /* Efecto de formación del árbol */
         .arbol-container {
             position: relative;
-            width: 180px;
-            height: 200px;
-            overflow: hidden; /* Importante para que parezca que crece */
+            width: 250px;
+            height: 280px;
+            overflow: hidden;
         }
 
         .arbol-img {
             width: 100%;
-            display: block;
-            position: relative;
-            z-index: 2;
-            transform: translateY(100%);
-            animation: growTree 3s ease-out forwards;
+            height: auto;
+            /* Máscara que inicia vacía y se llena hacia arriba */
+            clip-path: inset(100% 0 0 0); 
+            animation: formarArbol 4s ease-in-out forwards;
         }
 
-        @keyframes growTree {
-            to { transform: translateY(0); }
+        @keyframes formarArbol {
+            0% { clip-path: inset(100% 0 0 0); }
+            100% { clip-path: inset(0% 0 0 0); }
         }
 
-        @keyframes slideUp {
-            to { opacity: 1; transform: translateY(0) rotate(-6deg); }
-        }
-
+        /* Contador grande abajo */
         .contador-abajo {
             font-size: 3.5rem;
             color: #ff4d6d;
             font-weight: 800;
-            margin-bottom: 50px;
-            z-index: 10;
+            margin-bottom: 60px;
             opacity: 0;
-            animation: fadeIn 1s forwards 3s;
+            transition: opacity 2s;
         }
 
-        /* Corazones (Solo empiezan después de que el árbol crece) */
+        /* Corazones animados */
         .corazon {
             position: absolute;
             color: #ff758f;
+            pointer-events: none;
             z-index: 1;
-            animation: brotar 4s ease-out forwards;
+            animation: brotarCorazon 4s ease-out forwards;
         }
 
-        @keyframes brotar {
-            0% { transform: translateY(0) scale(0.5); opacity: 0; }
-            20% { opacity: 1; }
-            100% { transform: translateY(-180px) translateX(var(--random-x)) scale(1.2); opacity: 0; }
+        @keyframes brotarCorazon {
+            0% { transform: translateY(0) scale(0); opacity: 0; }
+            20% { opacity: 1; transform: translateY(-20px) scale(1.2); }
+            100% { transform: translateY(-250px) translateX(var(--rx)) scale(1.5); opacity: 0; }
         }
     </style>
 </head>
 <body>
 
     <div class="texto-superior">
-        <p id="texto-animado"></p>
+        <p id="texto-escrito"></p><span class="cursor" id="cursor"></span>
     </div>
 
     <div class="seccion-media">
-        <img src="nuestra-foto.jpg" alt="Nosotros" class="nuestra-foto">
+        <img src="nuestra-foto.jpg" alt="Nosotros" class="nuestra-foto" id="foto">
+        
         <div class="arbol-container">
-            <img src="arbol.png" alt="Árbol" class="arbol-img">
-            <div id="puntos-corazones"></div>
+            <img src="1000076520.png" alt="Árbol" class="arbol-img">
+            <div id="contenedor-corazones"></div>
         </div>
     </div>
 
-    <div class="contador-abajo" id="contador-principal">0 meses</div>
+    <div class="contador-abajo" id="contador">19 meses</div>
 
     <script>
-        const textoCompleto = "Cuanto más tiempo paso a tu lado me enamoro más de ti, feliz 19 meses amorcito te amo demasiado y quiero cumplir muchos años más a tu lado mi niña hermosa ❤️";
-        let i = 0;
+        const frase = "Cuanto más tiempo paso a tu lado me enamoro más de ti, feliz 19 meses amorcito te amo demasiado y quiero cumplir muchos años más a tu lado mi niña hermosa ❤️";
+        const contenedorTexto = document.getElementById('texto-escrito');
+        const foto = document.getElementById('foto');
+        const contador = document.getElementById('contador');
+        let index = 0;
 
-        // Función para escribir el texto letra por letra
-        function escribirTexto() {
-            if (i < textoCompleto.length) {
-                document.getElementById("texto-animado").innerHTML += textoCompleto.charAt(i);
-                i++;
-                setTimeout(escribirTexto, 50); // Velocidad de escritura
+        // 1. Efecto de escribir letra por letra
+        function escribir() {
+            if (index < frase.length) {
+                contenedorTexto.innerHTML += frase.charAt(index);
+                index++;
+                setTimeout(escribir, 60); // Velocidad de las letras
+            } else {
+                document.getElementById('cursor').style.display = 'none';
+                // Al terminar el texto, mostramos la foto y el contador
+                foto.style.opacity = "1";
+                foto.style.transform = "translateY(0) rotate(-6deg)";
+                contador.style.opacity = "1";
             }
         }
 
-        // Lógica del tiempo
-        function actualizarTiempo() {
-            const inicio = new Date('2024-08-03T00:00:00');
-            const ahora = new Date();
-            let meses = (ahora.getFullYear() - inicio.getFullYear()) * 12 + (ahora.getMonth() - inicio.getMonth());
-            if (ahora.getDate() < inicio.getDate()) meses--;
-            document.getElementById('contador-principal').innerText = `${meses} meses`;
-        }
-
+        // 2. Lógica para que broten corazones del árbol
         function crearCorazon() {
-            const contenedor = document.getElementById('puntos-corazones');
+            const container = document.getElementById('contenedor-corazones');
             const corazon = document.createElement('div');
             corazon.classList.add('corazon');
             corazon.innerHTML = '❤️';
-            corazon.style.left = Math.random() * 100 + 40 + 'px';
-            corazon.style.bottom = '100px';
-            corazon.style.setProperty('--random-x', (Math.random() * 80 - 40) + 'px');
-            contenedor.appendChild(corazon);
+            
+            // Posición aleatoria sobre las ramas del árbol
+            corazon.style.left = Math.random() * 150 + 50 + 'px';
+            corazon.style.bottom = '150px';
+            corazon.style.setProperty('--rx', (Math.random() * 100 - 50) + 'px');
+            corazon.style.fontSize = Math.random() * 20 + 15 + 'px';
+
+            container.appendChild(corazon);
             setTimeout(() => corazon.remove(), 4000);
         }
 
-        // Iniciar animaciones al cargar
+        // Iniciar todo
         window.onload = () => {
-            actualizarTiempo();
-            setTimeout(escribirTexto, 500); // El texto empieza un poco después
+            // El árbol empieza a crecer solo
+            // El texto empieza a escribirse a los 1.5 segundos
+            setTimeout(escribir, 1500);
+            
+            // Los corazones empiezan a salir cuando el árbol ya creció un poco
             setTimeout(() => {
-                setInterval(crearCorazon, 400); // Los corazones empiezan tras crecer el árbol
-            }, 2500);
+                setInterval(crearCorazon, 350);
+            }, 3000);
         };
     </script>
 </body>
