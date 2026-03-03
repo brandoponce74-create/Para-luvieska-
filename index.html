@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>19 Meses de Puro Amor ❤️</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Quicksand:wght@700&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: url('1000076521.png') no-repeat center center fixed;
+            background-size: cover;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        .texto-superior {
+            width: 85%;
+            margin-top: 20px;
+            text-align: center;
+            min-height: 90px;
+            z-index: 100;
+        }
+
+        .texto-superior p {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.4rem;
+            color: #333;
+            text-shadow: 1px 1px 5px white;
+        }
+
+        /* ÁRBOL REFORZADO */
+        .tree-container {
+            position: relative;
+            width: 100%;
+            height: 55vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+        }
+
+        .branch {
+            fill: none;
+            stroke: #3d261f; /* Marrón más oscuro para que resalte */
+            stroke-width: 5;
+            stroke-linecap: round;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: grow 4s ease-out forwards;
+        }
+
+        @keyframes grow { to { stroke-dashoffset: 0; } }
+
+        /* CORAZONES DINÁMICOS */
+        .leaf {
+            position: absolute;
+            opacity: 0;
+            transform: scale(0);
+            animation: pop 1.2s cubic-bezier(0.17, 0.89, 0.32, 1.49) forwards;
+        }
+
+        @keyframes pop { to { opacity: 0.9; transform: scale(1); } }
+
+        .nuestra-foto {
+            width: 110px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 4px solid white;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+            position: absolute;
+            left: 5%;
+            bottom: 12%;
+            opacity: 0;
+            transform: rotate(-5deg);
+            transition: 1.5s;
+            z-index: 110;
+        }
+
+        .contador-final {
+            position: fixed;
+            bottom: 15px;
+            width: 100%;
+            text-align: center;
+            font-size: 3.5rem;
+            color: #ff4d6d;
+            font-weight: 900;
+            text-shadow: 2px 2px 10px white;
+            opacity: 0;
+            transition: 2s;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="texto-superior">
+        <p id="writer"></p>
+    </div>
+
+    <div class="tree-container" id="tree-box">
+        <svg viewBox="0 0 200 200" width="320" height="320">
+            <path class="branch" d="M100,200 L100,120" style="stroke-width: 10;"/>
+            <path class="branch" d="M100,135 Q70,115 40,80" style="animation-delay: 0.5s; stroke-width: 7;"/>
+            <path class="branch" d="M100,135 Q130,115 160,80" style="animation-delay: 0.8s; stroke-width: 7;"/>
+            <path class="branch" d="M100,120 Q100,60 100,25" style="animation-delay: 1.1s; stroke-width: 6;"/>
+            <path class="branch" d="M70,100 Q40,90 25,60" style="animation-delay: 1.5s; stroke-width: 4;"/>
+            <path class="branch" d="M130,100 Q160,90 175,60" style="animation-delay: 1.8s; stroke-width: 4;"/>
+            <path class="branch" d="M100,80 Q70,55 80,20" style="animation-delay: 2.1s; stroke-width: 4;"/>
+            <path class="branch" d="M100,80 Q130,55 120,20" style="animation-delay: 2.4s; stroke-width: 4;"/>
+        </svg>
+        <div id="hearts-layer"></div>
+    </div>
+
+    <img src="nuestra-foto.jpg" alt="Amor" class="nuestra-foto" id="foto-amor">
+    <div class="contador-final" id="meses-tag">19 meses</div>
+
+    <script>
+        const frase = "Cuanto más tiempo paso a tu lado me enamoro más de ti, feliz 19 meses amorcito te amo demasiado y quiero cumplir muchos años más a tu lado ❤️";
+        let char = 0;
+
+        function type() {
+            if (char < frase.length) {
+                document.getElementById('writer').innerHTML += frase.charAt(char);
+                char++;
+                setTimeout(type, 45);
+            } else {
+                document.getElementById('foto-amor').style.opacity = "1";
+                document.getElementById('meses-tag').style.opacity = "1";
+            }
+        }
+
+        function createHearts() {
+            const layer = document.getElementById('hearts-layer');
+            // Colores variados: Rojos, Rosas, Púrpuras y un toque de Oro
+            const colors = ['#ff4d6d', '#ff758f', '#c9184a', '#ffb3c1', '#ffd60a', '#9d4edd'];
+            
+            // Puntos estratégicos donde nacen las ramas
+            const nodes = [
+                {x: 100, y: 30}, {x: 40, y: 80}, {x: 160, y: 80}, 
+                {x: 25, y: 60}, {x: 175, y: 60}, {x: 80, y: 25}, {x: 120, y: 25}
+            ];
+
+            for (let i = 0; i < 650; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'leaf';
+                heart.innerHTML = '❤️';
+                heart.style.color = colors[Math.floor(Math.random() * colors.length)];
+                
+                // Distribución orgánica siguiendo las ramas
+                const node = nodes[Math.floor(Math.random() * nodes.length)];
+                const offsetX = (Math.random() * 90 - 45);
+                const offsetY = (Math.random() * 90 - 45);
+                
+                // Centramos el árbol en el canvas
+                const centerX = window.innerWidth / 2;
+                heart.style.left = (centerX - 10 + offsetX + (node.x - 100) * 1.2) + 'px';
+                heart.style.top = (280 + offsetY + (node.y - 100) * 1.2) + 'px';
+                
+                heart.style.fontSize = (Math.random() * 14 + 6) + 'px';
+                heart.style.animationDelay = (2.5 + Math.random() * 4) + 's';
+                
+                layer.appendChild(heart);
+            }
+        }
+
+        window.onload = () => {
+            type();
+            createHearts();
+        };
+    </script>
+</body>
+</html>
