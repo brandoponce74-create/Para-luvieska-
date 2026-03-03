@@ -3,15 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para Luvieska</title>
+    <title>Para mi niña hermosa</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Quicksand:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        :root { --pink-bg: #fce4ec; --heart-red: #ff4d6d; --text-color: #5d4037; }
-        body { margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: var(--pink-bg); font-family: 'Quicksand', sans-serif; overflow: hidden; }
-        .card { text-align: center; width: 95%; max-width: 500px; padding: 15px; }
-        #message-area { font-family: 'Dancing Script', cursive; font-size: 1.4rem; color: var(--text-color); min-height: 110px; margin-bottom: 25px; line-height: 1.3; }
+        :root { 
+            --pink-bg: #fce4ec; 
+            --heart-red: #ff4d6d; 
+            --text-color: #5d4037; 
+        }
         
-        .duo-container { display: flex; justify-content: center; align-items: flex-end; gap: 15px; margin-bottom: 30px; }
+        body { 
+            margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; 
+            min-height: 100vh; background-color: var(--pink-bg); 
+            font-family: 'Quicksand', sans-serif; overflow: hidden; 
+        }
+        
+        .card { text-align: center; width: 95%; max-width: 500px; padding: 15px; }
+        
+        #message-area { 
+            font-family: 'Dancing Script', cursive; font-size: 1.4rem; 
+            color: var(--text-color); min-height: 110px; margin-bottom: 25px; line-height: 1.3; 
+        }
+        
+        .duo-container { 
+            display: flex; justify-content: center; align-items: flex-end; 
+            gap: 15px; margin-bottom: 30px; 
+        }
         
         .photo-side { 
             width: 140px; height: 185px; 
@@ -24,17 +41,30 @@
             position: relative; width: 180px; height: 240px; 
             background-image: url('arbol-artístico.png'); 
             background-size: contain; background-repeat: no-repeat; background-position: bottom;
+            z-index: 1;
         }
 
-        /* Corazones como hojas cayendo */
-        .heart { position: absolute; color: var(--heart-red); font-size: 20px; pointer-events: none; animation: leaf-fall linear forwards; }
-        @keyframes leaf-fall {
+        /* Corazones que suben y se expanden como hojas */
+        .heart { 
+            position: absolute; color: var(--heart-red); 
+            font-size: 18px; pointer-events: none; z-index: 2;
+            animation: heart-growth linear forwards; 
+        }
+
+        @keyframes heart-growth {
             0% { transform: translateY(0) scale(0); opacity: 0; }
-            10% { opacity: 1; transform: translateY(-10px) scale(1.3); }
-            100% { transform: translateY(-190px) translateX(calc(var(--x) * 1px)) scale(1); opacity: 0.5; }
+            20% { opacity: 1; transform: translateY(-20px) scale(1.2); }
+            100% { 
+                /* Sube hacia las ramas y se dispersa hacia los lados */
+                transform: translateY(-180px) translateX(calc(var(--x) * 1px)) scale(1); 
+                opacity: 0; 
+            }
         }
 
-        #timer { font-weight: bold; font-size: 2.8rem; color: var(--heart-red); text-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        #timer { 
+            font-weight: bold; font-size: 2.8rem; color: var(--heart-red); 
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+        }
     </style>
 </head>
 <body>
@@ -48,7 +78,7 @@
     </div>
 
     <script>
-        // TU MENSAJE PERSONALIZADO
+        // TU MENSAJE ACTUALIZADO
         const text = "Cuanto más tiempo paso a tu lado me enamoro más de ti, feliz 19 meses amorcito te amo demasiado y quiero cumplir muchos años más a tu lado mi niña hermosa ❤️";
         let index = 0;
 
@@ -65,18 +95,23 @@
             const heart = document.createElement('div');
             heart.classList.add('heart');
             heart.innerHTML = '❤';
-            // Caen sobre el área del árbol
-            heart.style.setProperty('--x', (Math.random() - 0.5) * 150);
+            
+            // Los corazones brotan desde el centro del tronco
+            // y se dispersan hacia los lados (--x)
+            heart.style.setProperty('--x', (Math.random() - 0.5) * 180); 
             heart.style.left = '50%';
-            heart.style.bottom = '90px';
-            const dur = Math.random() * 2 + 3;
+            heart.style.bottom = '60px'; 
+            
+            const dur = Math.random() * 2 + 2.5;
             heart.style.animationDuration = dur + 's';
+            
             container.appendChild(heart);
             setTimeout(() => heart.remove(), dur * 1000);
         }
 
         typeWriter();
-        setInterval(createHeart, 350);
+        // Genera corazones más seguido para que el árbol se vea "lleno"
+        setInterval(createHeart, 150); 
     </script>
 </body>
 </html>
