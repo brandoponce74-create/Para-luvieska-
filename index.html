@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aniversario con Árbol Real ❤️</title>
+    <title>Aniversario ❤️</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Quicksand:wght@700&display=swap');
 
@@ -126,7 +126,7 @@
             }
         }
 
-        // 2. Función Fractal para Ramificar el Árbol (Vida real)
+        // 2. Función Fractal para Ramificar el Árbol
         function drawTree(startX, startY, len, angle, branchWidth) {
             ctx.beginPath();
             ctx.save();
@@ -139,7 +139,7 @@
             ctx.stroke();
 
             if (len < 15) {
-                // Dibujar hoja de corazón al final de la ramita
+                // Hojas de corazón al final de las ramas
                 ctx.fillStyle = "#ff4d6d";
                 ctx.font = "10px Arial";
                 ctx.fillText("❤️", -5, -len);
@@ -147,7 +147,7 @@
                 return;
             }
 
-            // Ramificar!
+            // Ramificar
             setTimeout(() => {
                 drawTree(0, -len, len * 0.75, angle - 20, branchWidth * 0.7);
                 drawTree(0, -len, len * 0.75, angle + 20, branchWidth * 0.7);
@@ -171,10 +171,10 @@
 
         window.onload = () => {
             escribir();
-            // Iniciar dibujo del árbol desde el centro abajo
+            // Iniciar dibujo del árbol
             drawTree(200, 450, 80, 0, 8);
             
-            // Iniciar lluvia después de que el árbol empiece a crecer
+            // Iniciar lluvia
             setTimeout(() => {
                 setInterval(crearLluvia, 400);
             }, 2000);
