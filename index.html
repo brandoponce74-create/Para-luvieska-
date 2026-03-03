@@ -12,9 +12,10 @@ body{
     background: black url("1000076521.png") no-repeat center center fixed;
     background-size: cover;
     overflow:hidden;
+    font-family: Arial, sans-serif;
 }
 
-/* CONTENEDOR GENERAL */
+/* CONTENEDOR CENTRAL */
 .scene{
     position:absolute;
     bottom:0;
@@ -22,6 +23,7 @@ body{
     transform:translateX(-50%);
     width:320px;
     height:500px;
+    z-index:2;
 }
 
 /* ÁRBOL */
@@ -29,6 +31,7 @@ body{
     position:absolute;
     bottom:0;
     width:100%;
+    z-index:2;
 }
 
 /* FOTO */
@@ -39,14 +42,28 @@ body{
     transform:translateX(-50%);
     width:130px;
     border-radius:12px;
+    z-index:5;
+}
+
+/* TEXTO */
+.texto{
+    position:absolute;
+    top:40px;
+    width:100%;
+    text-align:center;
+    color:#ffb3c1;
+    font-size:22px;
+    font-weight:bold;
+    text-shadow: 0 0 8px black;
     z-index:10;
 }
 
 /* CORAZONES */
 .heart{
     position:absolute;
-    animation: grow 6s linear forwards;
+    z-index:8;
     pointer-events:none;
+    animation: grow 6s linear forwards;
 }
 
 @keyframes grow{
@@ -58,6 +75,11 @@ body{
 </head>
 
 <body>
+
+<div class="texto">
+    ❤️ Feliz Aniversario ❤️<br>
+    Te amo con todo mi corazón
+</div>
 
 <div class="scene" id="treeArea">
     <img src="arbol.png" class="tree">
@@ -75,16 +97,16 @@ function createHeart(){
     heart.style.color=colors[Math.floor(Math.random()*colors.length)];
 
     const x=(Math.random()-0.5)*200;
-    const y=Math.random()*150+200;
+    const y=Math.random()*140+200;
 
     heart.style.left="50%";
     heart.style.bottom=y+"px";
     heart.style.transform=`translateX(${x}px)`;
-    heart.style.fontSize=(Math.random()*12+14)+"px";
+    heart.style.fontSize=(Math.random()*14+16)+"px";
 
     area.appendChild(heart);
 }
-setInterval(createHeart,120);
+setInterval(createHeart,150);
 </script>
 
 </body>
