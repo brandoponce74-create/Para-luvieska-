@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aniversario ❤️</title>
+    <title>Para mi niña hermosa ❤️</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Quicksand:wght@700&display=swap');
 
@@ -35,7 +35,7 @@
             line-height: 1.2;
         }
 
-        .contenedor-central {
+        #canvas-container {
             position: relative;
             width: 100%;
             height: 60vh;
@@ -46,7 +46,6 @@
 
         canvas {
             display: block;
-            z-index: 5;
         }
 
         .nuestra-foto {
@@ -58,20 +57,18 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.3);
             position: absolute;
             left: 5%;
-            bottom: 50px;
+            bottom: 20%;
             opacity: 0;
             transform: scale(0.5) rotate(-10deg);
-            transition: all 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 50;
+            transition: all 1.5s ease-in-out;
         }
 
-        .hoja-caida {
+        .corazon-volando {
             position: absolute;
             color: #ff4d6d;
             font-size: 14px;
             pointer-events: none;
-            z-index: 10;
-            animation: caer 6s linear forwards;
+            animation: caer 5s linear forwards;
         }
 
         @keyframes caer {
@@ -81,103 +78,99 @@
         }
 
         .contador-pie {
-            font-size: 3.5rem;
+            font-size: 3.2rem;
             color: #ff4d6d;
             font-weight: 800;
             margin-bottom: 30px;
             opacity: 0;
             transition: opacity 2s;
-            z-index: 100;
         }
     </style>
 </head>
 <body>
 
     <div class="texto-superior">
-        <p id="typewriter"></p>
+        <p id="escritura"></p>
     </div>
 
-    <div class="contenedor-central">
-        <img src="nuestra-foto.jpg" alt="Amor" class="nuestra-foto" id="foto">
+    <div id="canvas-container">
+        <img src="nuestra-foto.jpg" alt="Amor" class="nuestra-foto" id="mifoto">
         <canvas id="treeCanvas"></canvas>
     </div>
 
-    <div class="contador-pie" id="meses">19 meses</div>
+    <div class="contador-pie" id="meses_txt">19 meses</div>
 
     <script>
         const canvas = document.getElementById('treeCanvas');
         const ctx = canvas.getContext('2d');
-        canvas.width = 400;
-        canvas.height = 450;
+        canvas.width = window.innerWidth;
+        canvas.height = 400;
 
         const frase = "Cuanto más tiempo paso a tu lado me enamoro más de ti, feliz 19 meses amorcito te amo demasiado y quiero cumplir muchos años más a tu lado mi niña hermosa ❤️";
-        let charIdx = 0;
+        let i = 0;
 
-        // 1. Efecto Escritura
-        function escribir() {
-            if (charIdx < frase.length) {
-                document.getElementById("typewriter").innerHTML += frase.charAt(charIdx);
-                charIdx++;
-                setTimeout(escribir, 50);
+        // 1. Escritura automática
+        function escribirTexto() {
+            if (i < frase.length) {
+                document.getElementById("escritura").innerHTML += frase.charAt(i);
+                i++;
+                setTimeout(escribirTexto, 40);
             } else {
-                document.getElementById('foto').style.opacity = "1";
-                document.getElementById('foto').style.transform = "scale(1) rotate(-6deg)";
-                document.getElementById('meses').style.opacity = "1";
+                document.getElementById('mifoto').style.opacity = "1";
+                document.getElementById('mifoto').style.transform = "scale(1) rotate(-6deg)";
+                document.getElementById('meses_txt').style.opacity = "1";
             }
         }
 
-        // 2. Función Fractal para Ramificar el Árbol
-        function drawTree(startX, startY, len, angle, branchWidth) {
+        // 2. Función para dibujar el árbol con MUCHAS ramas
+        function drawBranch(x, y, len, angle, width) {
             ctx.beginPath();
             ctx.save();
             ctx.strokeStyle = "#4e342e";
-            ctx.lineWidth = branchWidth;
-            ctx.translate(startX, startY);
+            ctx.lineWidth = width;
+            ctx.translate(x, y);
             ctx.rotate(angle * Math.PI / 180);
             ctx.moveTo(0, 0);
             ctx.lineTo(0, -len);
             ctx.stroke();
 
-            if (len < 15) {
-                // Hojas de corazón al final de las ramas
+            if (len < 10) {
+                // Dibuja la hoja (corazón)
                 ctx.fillStyle = "#ff4d6d";
-                ctx.font = "10px Arial";
-                ctx.fillText("❤️", -5, -len);
+                ctx.font = "12px Arial";
+                ctx.fillText("❤️", -6, -len);
                 ctx.restore();
                 return;
             }
 
-            // Ramificar
+            // Aquí está la ramificación: crea 3 ramas por cada una
             setTimeout(() => {
-                drawTree(0, -len, len * 0.75, angle - 20, branchWidth * 0.7);
-                drawTree(0, -len, len * 0.75, angle + 20, branchWidth * 0.7);
-            }, 100);
+                drawBranch(0, -len, len * 0.8, angle - 25, width * 0.7);
+                drawBranch(0, -len, len * 0.8, angle + 25, width * 0.7);
+                drawBranch(0, -len, len * 0.6, angle + 2, width * 0.7);
+            }, 50);
 
             ctx.restore();
         }
 
-        // 3. Lluvia de corazones
-        function crearLluvia() {
-            const contenedor = document.querySelector('.contenedor-central');
-            const corazon = document.createElement('div');
-            corazon.className = 'hoja-caida';
-            corazon.innerHTML = '❤️';
-            corazon.style.left = (Math.random() * 80 + 10) + '%';
-            corazon.style.top = '100px';
-            corazon.style.setProperty('--rx', (Math.random() * 200 - 100) + 'px');
-            contenedor.appendChild(corazon);
-            setTimeout(() => corazon.remove(), 6000);
+        // 3. Corazones que caen
+        function lluvia() {
+            const container = document.getElementById('canvas-container');
+            const c = document.createElement('div');
+            c.className = 'corazon-volando';
+            c.innerHTML = '❤️';
+            c.style.left = Math.random() * 100 + '%';
+            c.style.top = '0px';
+            c.style.setProperty('--rx', (Math.random() * 200 - 100) + 'px');
+            container.appendChild(c);
+            setTimeout(() => c.remove(), 5000);
         }
 
         window.onload = () => {
-            escribir();
-            // Iniciar dibujo del árbol
-            drawTree(200, 450, 80, 0, 8);
-            
-            // Iniciar lluvia
-            setTimeout(() => {
-                setInterval(crearLluvia, 400);
-            }, 2000);
+            escribirTexto();
+            // Inicia el árbol en el centro del canvas
+            drawBranch(canvas.width / 2, canvas.height, 70, 0, 7);
+            setInterval(lluvia, 400);
         };
     </script>
 </body>
