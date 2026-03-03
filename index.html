@@ -14,23 +14,27 @@ body{
     overflow:hidden;
 }
 
-/* CONTENEDOR DEL ÁRBOL */
-.tree-wrapper{
+/* CONTENEDOR GENERAL */
+.scene{
     position:absolute;
     bottom:0;
     left:50%;
     transform:translateX(-50%);
     width:320px;
-    height:420px;
-    background: url("arbol.png") no-repeat bottom center;
-    background-size: contain;
-    z-index:5;
+    height:500px;
+}
+
+/* ÁRBOL */
+.tree{
+    position:absolute;
+    bottom:0;
+    width:100%;
 }
 
 /* FOTO */
 .photo{
     position:absolute;
-    bottom:160px;
+    bottom:200px;
     left:50%;
     transform:translateX(-50%);
     width:130px;
@@ -39,9 +43,8 @@ body{
 }
 
 /* CORAZONES */
-.heart-leaf{
+.heart{
     position:absolute;
-    opacity:0;
     animation: grow 6s linear forwards;
     pointer-events:none;
 }
@@ -56,29 +59,30 @@ body{
 
 <body>
 
-<div class="tree-wrapper" id="tree">
+<div class="scene" id="treeArea">
+    <img src="arbol.png" class="tree">
     <img src="nuestra-foto.jpg" class="photo">
 </div>
 
 <script>
 function createHeart(){
-    const tree=document.getElementById("tree");
+    const area=document.getElementById("treeArea");
     const heart=document.createElement("div");
-    heart.className="heart-leaf";
+    heart.className="heart";
     heart.textContent="❤";
 
     const colors=["#ff4d6d","#ff758f","#c9184a","#ffb3c1"];
     heart.style.color=colors[Math.floor(Math.random()*colors.length)];
 
     const x=(Math.random()-0.5)*200;
-    const y=Math.random()*140+120;
+    const y=Math.random()*150+200;
 
     heart.style.left="50%";
     heart.style.bottom=y+"px";
     heart.style.transform=`translateX(${x}px)`;
     heart.style.fontSize=(Math.random()*12+14)+"px";
 
-    tree.appendChild(heart);
+    area.appendChild(heart);
 }
 setInterval(createHeart,120);
 </script>
