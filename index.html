@@ -1,107 +1,101 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para mi niña hermosa</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Quicksand:wght@400;500&display=swap" rel="stylesheet">
-    <style>
-        :root { --heart-red: #ff4d6d; }
-        
-        body { 
-            margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; 
-            min-height: 100vh; font-family: 'Quicksand', sans-serif; overflow: hidden;
-            /* TU IMAGEN DE FONDO */
-            background: url('1000076521.png') no-repeat center center fixed; 
-            background-size: cover;
-        }
+  <meta charset="UTF-8">
+  <title>Contador de Amor</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      font-family: 'Arial', sans-serif;
+      color: white;
+      text-align: center;
+    }
 
-        /* Capa para que el texto sea legible sobre las flores */
-        body::before {
-            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.3); z-index: 0;
-        }
+    .container {
+      background: rgba(0,0,0,0.3);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    }
 
-        .card { 
-            text-align: center; width: 95%; max-width: 500px; z-index: 10; 
-            background: rgba(255, 255, 255, 0.85); padding: 20px; border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-        
-        #message-area { 
-            font-family: 'Dancing Script', cursive; font-size: 1.4rem; 
-            color: #4a332d; min-height: 80px; margin-bottom: 10px;
-        }
+    h1 {
+      font-size: 1.8em;
+      margin-bottom: 20px;
+    }
 
-        /* Contenedor principal similar al de tu imagen de referencia */
-        .tree-container { 
-            position: relative; display: flex; justify-content: center; 
-            align-items: flex-end; gap: 15px; height: 280px; 
-        }
+    .time {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      font-size: 2em;
+      font-weight: bold;
+    }
 
-        .photo-side { 
-            width: 120px; height: 160px; 
-            background: url('nuestra-foto.jpg') center/cover;
-            border-radius: 12px; border: 4px solid white;
-        }
-        
-        .full-tree-wrapper { 
-            position: relative; width: 220px; height: 260px; 
-            background: url('arbol-artístico.png') no-repeat bottom center/contain;
-        }
+    .box {
+      background: rgba(255,255,255,0.2);
+      padding: 15px 25px;
+      border-radius: 15px;
+      min-width: 120px;
+    }
 
-        /* EFECTO HOJA: Aparece en la rama y se queda ahí */
-        .heart-leaf {
-            position: absolute; color: var(--heart-red); pointer-events: none;
-            animation: stay-in-branch 6s ease-in-out forwards;
-        }
-
-        @keyframes stay-in-branch {
-            0% { transform: scale(0) rotate(0deg); opacity: 0; }
-            15% { opacity: 1; transform: scale(1.2) rotate(15deg); }
-            /* Se queda en su lugar con un leve balanceo */
-            80% { opacity: 0.8; transform: scale(1) rotate(-10deg) translateY(5px); }
-            100% { opacity: 0; transform: scale(0.6) translateY(15px); }
-        }
-
-        #timer { font-weight: bold; font-size: 2.8rem; color: var(--heart-red); margin-top: 15px; }
-    </style>
+    .label {
+      display: block;
+      font-size: 0.5em;
+      margin-top: 5px;
+    }
+  </style>
 </head>
 <body>
-    <div class="card">
-        <div id="message-area"></div>
-        <div class="tree-container">
-            <div class="photo-side"></div>
-            <div class="full-tree-wrapper" id="tree-target"></div>
-        </div>
-        <div id="timer">19 meses</div>
+
+<div class="container">
+  <h1>Hola mi niña hermosa y dulce pastelito luvi</h1>
+  <div class="time">
+    <div class="box">
+      <span id="months">0</span>
+      <span class="label">Meses</span>
     </div>
+    <div class="box">
+      <span id="days">0</span>
+      <span class="label">Días</span>
+    </div>
+  </div>
+</div>
 
-    <script>
-        const text = "Cuanto más tiempo paso a tu lado me enamoro más de ti, feliz 19 meses amorcito ❤️";
-        let i = 0;
-        function type() { if(i < text.length) { document.getElementById("message-area").innerHTML += text.charAt(i); i++; setTimeout(type, 60); } }
+<script>
+  const startDate = new Date("2024-08-03");
 
-        function createHeart() {
-            const tree = document.getElementById('tree-target');
-            const heart = document.createElement('div');
-            heart.classList.add('heart-leaf');
-            heart.innerHTML = '❤';
-            
-            // Ajustamos el área de aparición a las ramas rizadas del árbol artístico
-            const x = Math.random() * 180 - 90; // Ancho de la copa
-            const y = Math.random() * 140 + 80;  // Altura de las ramas
-            
-            heart.style.left = `calc(50% + ${x}px)`;
-            heart.style.bottom = `${y}px`;
-            heart.style.fontSize = (Math.random() * 10 + 12) + 'px';
+  function updateCounter() {
+    const now = new Date();
 
-            tree.appendChild(heart);
-            setTimeout(() => heart.remove(), 6000);
-        }
+    let years = now.getFullYear() - startDate.getFullYear();
+    let months = now.getMonth() - startDate.getMonth();
+    let days = now.getDate() - startDate.getDate();
 
-        type();
-        setInterval(createHeart, 150); // Genera hojas constantemente
-    </script>
+    if (days < 0) {
+      months--;
+      const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+      days += prevMonth;
+    }
+
+    if (months < 0) {
+      years--;
+      months += 12;
+    }
+
+    const totalMonths = years * 12 + months;
+
+    document.getElementById("months").textContent = totalMonths;
+    document.getElementById("days").textContent = days;
+  }
+
+  updateCounter();
+  setInterval(updateCounter, 1000);
+</script>
+
 </body>
 </html>
