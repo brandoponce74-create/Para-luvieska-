@@ -1,142 +1,124 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>Amor</title>
-<style>
-* {
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Luvieska</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Quicksand:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root { --heart-red: #ff4d6d; --text-color: #5d4037; }
+        
+        body { 
+            margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; 
+            min-height: 100vh; font-family: 'Quicksand', sans-serif; overflow: hidden;
+            /* TU IMAGEN DE FONDO */
+            background: url('1000076521.png') no-repeat center center fixed; 
+            background-size: cover;
+        }
 
-body {
-  margin: 0;
-  height: 100vh;
-  overflow: hidden;
-  background: linear-gradient(135deg, #ff5f6d, #ffc371);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-}
+        /* Capa para suavizar el fondo y leer mejor */
+        body::before {
+            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.15); z-index: 0;
+        }
 
-.container {
-  text-align: center;
-  background: rgba(0,0,0,0.3);
-  padding: 25px;
-  border-radius: 20px;
-  animation: fadeIn 2s ease;
-}
+        .card { 
+            text-align: center; width: 95%; max-width: 500px; z-index: 10; 
+            background: rgba(255, 255, 255, 0.85); padding: 25px; border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        #message-area { 
+            font-family: 'Dancing Script', cursive; font-size: 1.5rem; 
+            color: var(--text-color); min-height: 90px; margin-bottom: 10px;
+            line-height: 1.3; text-shadow: 1px 1px 1px white;
+        }
 
-h1 {
-  font-size: 1.5em;
-  margin-bottom: 15px;
-}
+        .main-visual-container { 
+            display: flex; flex-direction: column; align-items: center; gap: 15px;
+        }
 
-.time {
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  font-size: 2em;
-  font-weight: bold;
-}
+        .visual-row { 
+            display: flex; align-items: flex-end; justify-content: center; gap: 15px; width: 100%;
+        }
 
-.box {
-  background: rgba(255,255,255,0.2);
-  padding: 15px 25px;
-  border-radius: 15px;
-}
+        .photo-side { 
+            width: 120px; height: 165px; 
+            background: url('nuestra-foto.jpg') center/cover;
+            border-radius: 15px; border: 4px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        /* CONTENEDOR DEL ÁRBOL */
+        .tree-wrapper { 
+            position: relative; width: 210px; height: 260px; 
+            background: url('arbol-artístico.png') no-repeat bottom center/contain;
+        }
 
-.label {
-  display: block;
-  font-size: 0.4em;
-}
+        /* HOJAS DE CORAZÓN: Ahora sí nacen y se quedan en las ramas */
+        .leaf-heart {
+            position: absolute; color: var(--heart-red); pointer-events: none;
+            opacity: 0;
+            animation: stay-leaf 6s ease-in-out forwards;
+        }
 
-@keyframes fadeIn {
-  from {opacity: 0;}
-  to {opacity: 1;}
-}
+        /* Animación para que parezcan hojas, NO burbujas */
+        @keyframes stay-leaf {
+            0% { transform: scale(0); opacity: 0; }
+            15% { opacity: 0.9; transform: scale(1.2) translateY(-5px); }
+            /* VIBRACIÓN ORGÁNICA EN LA RAMA: Mayor variación lateral y de altura */
+            80% { 
+                opacity: 0.8; 
+                transform: scale(1) translateY(calc(-30px + var(--move-y))) translateX(var(--move-x)) rotate(var(--rotate)); 
+            }
+            100% { opacity: 0; transform: scale(0.6) translateY(-40px); }
+        }
 
-/* Corazones */
-.heart {
-  position: fixed;
-  bottom: -20px;
-  color: pink;
-  font-size: 20px;
-  animation: floatUp 6s linear forwards;
-}
-
-@keyframes floatUp {
-  to {
-    transform: translateY(-110vh);
-    opacity: 0;
-  }
-}
-</style>
+        #timer { font-weight: bold; font-size: 3rem; color: var(--heart-red); margin-top: 10px; }
+    </style>
 </head>
 <body>
-
-<div class="container">
-  <h1>Hola mi niña hermosa y dulce pastelito luvi</h1>
-  <div class="time">
-    <div class="box">
-      <span id="months">0</span>
-      <span class="label">Meses</span>
+    <div class="card">
+        <div id="message-area"></div>
+        <div class="main-visual-container">
+            <div class="visual-row">
+                <div class="photo-side"></div>
+                <div class="tree-wrapper" id="tree-canopy"></div>
+            </div>
+            <div id="timer">19 meses</div>
+        </div>
     </div>
-    <div class="box">
-      <span id="days">0</span>
-      <span class="label">Días</span>
-    </div>
-  </div>
-</div>
 
-<script>
-const startDate = new Date("2024-08-03");
+    <script>
+        const text = "Cuanto más tiempo paso a tu lado me enamoro más de ti, feliz 19 meses amorcito ❤️";
+        let i = 0;
+        function type() { if(i < text.length) { document.getElementById("message-area").innerHTML += text.charAt(i); i++; setTimeout(type, 60); } }
 
-function updateCounter() {
-  const now = new Date();
+        function createLeaf() {
+            const container = document.getElementById('tree-canopy');
+            const leaf = document.createElement('div');
+            leaf.classList.add('leaf-heart');
+            leaf.innerHTML = '❤';
+            
+            // COORDENADAS AJUSTADAS ESPECÍFICAMENTE A LA COPA DEL ÁRBOL RIZADO
+            const x = (Math.random() - 0.5) * 190; 
+            const y = Math.random() * 120 + 100; // Altura donde están las ramas rizadas
+            
+            leaf.style.left = `calc(50% + ${x}px)`;
+            leaf.style.bottom = `${y}px`;
+            
+            // Variables para la vibración orgánica en la copa
+            leaf.style.setProperty('--move-x', (Math.random() * 20 - 10) + 'px');
+            leaf.style.setProperty('--move-y', (Math.random() * 10 - 5) + 'px');
+            leaf.style.setProperty('--rotate', (Math.random() * 40 - 20) + 'deg');
+            leaf.style.fontSize = (Math.random() * 10 + 14) + 'px';
 
-  let years = now.getFullYear() - startDate.getFullYear();
-  let months = now.getMonth() - startDate.getMonth();
-  let days = now.getDate() - startDate.getDate();
+            container.appendChild(leaf);
+            setTimeout(() => leaf.remove(), 6000);
+        }
 
-  if (days < 0) {
-    months--;
-    const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
-    days += prevMonth;
-  }
-
-  if (months < 0) {
-    years--;
-    months += 12;
-  }
-
-  const totalMonths = years * 12 + months;
-
-  document.getElementById("months").textContent = totalMonths;
-  document.getElementById("days").textContent = days;
-}
-
-setInterval(updateCounter, 1000);
-updateCounter();
-
-// Corazones
-function createHeart() {
-  const heart = document.createElement("div");
-  heart.className = "heart";
-  heart.innerHTML = "❤";
-  heart.style.left = Math.random() * 100 + "vw";
-  heart.style.fontSize = Math.random() * 20 + 10 + "px";
-  heart.style.animationDuration = Math.random() * 3 + 4 + "s";
-  document.body.appendChild(heart);
-
-  setTimeout(() => {
-    heart.remove();
-  }, 6000);
-}
-
-setInterval(createHeart, 300);
-</script>
-
+        type();
+        // Genera hojas más seguido para llenar el árbol
+        setInterval(createLeaf, 120); 
+    </script>
 </body>
 </html>
