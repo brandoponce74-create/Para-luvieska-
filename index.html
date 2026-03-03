@@ -20,7 +20,6 @@
             font-family: 'Quicksand', sans-serif;
         }
 
-        /* Texto con escritura */
         .texto-superior {
             width: 85%;
             margin-top: 30px;
@@ -45,7 +44,6 @@
             position: relative;
         }
 
-        /* La foto aparece al final */
         .nuestra-foto {
             width: 140px;
             height: 180px;
@@ -58,18 +56,17 @@
             transition: all 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* CONTENEDOR DEL ÁRBOL SVG */
+        /* CONTENEDOR DEL ÁRBOL */
         .arbol-svg-container {
-            width: 250px;
-            height: 300px;
+            width: 300px;
+            height: 350px;
             position: relative;
         }
 
-        /* Estilo para las ramas del árbol */
         .rama {
             fill: none;
             stroke: #5d4037;
-            stroke-width: 3;
+            stroke-width: 2;
             stroke-linecap: round;
             stroke-dasharray: 1000;
             stroke-dashoffset: 1000;
@@ -80,20 +77,32 @@
             to { stroke-dashoffset: 0; }
         }
 
-        /* Hojas/Corazones cayendo */
-        .hoja-corazon {
+        /* HOJAS QUE RELLENAN EL ÁRBOL */
+        .hoja-fija {
             position: absolute;
             color: #ff4d6d;
-            font-size: 15px;
-            pointer-events: none;
+            font-size: 12px;
             opacity: 0;
-            animation: caer 5s linear forwards;
+            animation: aparecerHoja 2s ease-out forwards;
+        }
+
+        @keyframes aparecerHoja {
+            to { opacity: 0.8; }
+        }
+
+        /* CORAZONES QUE CAEN */
+        .corazon-caida {
+            position: absolute;
+            color: #ff758f;
+            pointer-events: none;
+            z-index: 1;
+            animation: caer 6s linear forwards;
         }
 
         @keyframes caer {
             0% { transform: translateY(0) rotate(0deg); opacity: 0; }
             10% { opacity: 1; }
-            100% { transform: translateY(300px) rotate(360deg) translateX(var(--x)); opacity: 0; }
+            100% { transform: translateY(400px) rotate(360deg) translateX(var(--x)); opacity: 0; }
         }
 
         .contador-pie {
@@ -116,15 +125,10 @@
         <img src="nuestra-foto.jpg" alt="Amor" class="nuestra-foto" id="foto-amor">
         
         <div class="arbol-svg-container" id="arbol-box">
-            <svg viewBox="0 0 200 200" width="100%" height="100%">
-                <path class="rama" d="M100,200 L100,140" style="stroke-width: 8;"/>
-                <path class="rama" d="M100,160 Q70,140 60,110" animation-delay="1s"/>
-                <path class="rama" d="M80,130 Q50,110 40,80" animation-delay="1.5s"/>
-                <path class="rama" d="M100,160 Q130,140 140,110" animation-delay="1.2s"/>
-                <path class="rama" d="M120,130 Q150,110 160,80" animation-delay="1.8s"/>
-                <path class="rama" d="M100,140 Q100,100 100,60" animation-delay="0.5s"/>
-            </svg>
-            <div id="hojas-layer"></div>
+            <svg viewBox="0 0 200 200" width="100%" height="100%" id="arbol-svg">
+                </svg>
+            <div id="capa-hojas"></div>
+            <div id="capa-caida"></div>
         </div>
     </div>
 
@@ -138,36 +142,78 @@
             if (charIndex < texto.length) {
                 document.getElementById("typed").innerHTML += texto.charAt(charIndex);
                 charIndex++;
-                setTimeout(typeWriter, 55);
+                setTimeout(typeWriter, 50);
             } else {
-                // Aparece la foto y el contador
                 document.getElementById('foto-amor').style.opacity = "1";
                 document.getElementById('foto-amor').style.transform = "scale(1) rotate(-5deg)";
                 document.getElementById('meses-display').style.opacity = "1";
             }
         }
 
-        function crearHoja() {
-            const layer = document.getElementById('hojas-layer');
+        // Función para crear muchas hojas de corazón fijas en el árbol
+        function rellenarArbol() {
+            const capaHojas = document.getElementById('capa-hojas');
+            for (let i = 0; i < 150; i++) {
+                const hoja = document.createElement('div');
+                hoja.className = 'hoja-fija';
+                hoja.innerHTML = '❤️';
+                
+                // Distribución en forma de copa de árbol
+                const angle = Math.random() * Math.PI * 2;
+                const radius = Math.random() * 80;
+                const x = 150 + Math.cos(angle) * radius;
+                const y = 120 + Math.sin(angle) * (radius * 0.8);
+                
+                hoja.style.left = x + 'px';
+                hoja.style.top = y + 'px';
+                hoja.style.animationDelay = (Math.random() * 3 + 2) + 's';
+                
+                capaHojas.appendChild(hoja);
+            }
+        }
+
+        function crearCorazonCaida() {
+            const capaCaida = document.getElementById('capa-caida');
             const corazon = document.createElement('div');
-            corazon.className = 'hoja-corazon';
-            corazon.innerHTML = Math.random() > 0.3 ? '❤️' : '🌸';
+            corazon.className = 'corazon-caida';
+            corazon.innerHTML = '❤️';
             
-            // Posición arriba del árbol
-            corazon.style.left = Math.random() * 200 + 'px';
-            corazon.style.top = '50px';
-            corazon.style.setProperty('--x', (Math.random() * 100 - 50) + 'px');
+            corazon.style.left = (Math.random() * 200 + 50) + 'px';
+            corazon.style.top = '100px';
+            corazon.style.setProperty('--x', (Math.random() * 120 - 60) + 'px');
+            corazon.style.fontSize = (Math.random() * 10 + 10) + 'px';
             
-            layer.appendChild(corazon);
-            setTimeout(() => corazon.remove(), 5000);
+            capaCaida.appendChild(corazon);
+            setTimeout(() => corazon.remove(), 6000);
+        }
+
+        // Generar ramas densas en el SVG
+        function dibujarRamas() {
+            const svg = document.getElementById('arbol-svg');
+            const ramas = [
+                "M100,200 L100,150", // Tronco
+                "M100,160 Q80,140 60,110", "M100,160 Q120,140 140,110", // Ramas principales
+                "M80,135 Q60,120 45,95", "M120,135 Q140,120 155,95", // Ramas secundarias
+                "M100,150 Q100,110 100,70", // Centro
+                "M90,120 Q70,90 80,60", "M110,120 Q130,90 120,60" // Ramas superiores
+            ];
+            
+            ramas.forEach((d, i) => {
+                const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                path.setAttribute("d", d);
+                path.setAttribute("class", "rama");
+                path.style.animationDelay = (i * 0.3) + "s";
+                svg.appendChild(path);
+            });
         }
 
         window.onload = () => {
+            dibujarRamas();
             typeWriter();
-            // Los corazones empiezan a caer después de que el árbol crece
+            rellenarArbol();
             setTimeout(() => {
-                setInterval(crearHoja, 400);
-            }, 2000);
+                setInterval(crearCorazonCaida, 500);
+            }, 3000);
         };
     </script>
 </body>
